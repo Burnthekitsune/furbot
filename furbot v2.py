@@ -50,40 +50,33 @@ def get_link():
 
 
 def check_user(user):
-    file = open('userlist.txt', 'r')
-    username = str(user)
-    for line in file:
-        if username in line:
-            file.close()
-            return False
-        else:
-            file.close()
-            return True
+    with open('userlist.txt', 'r') as file:
+        username = str(user)
+        for line in file:
+            if username in line:
+                return False
 
 
 def remove_user(user):
     username = str(user)
-    user_list = open('userlist.txt', 'a')
-    user_list.write(username + '|')
-    user_list.close()
+    with open('userlist.txt', 'a') as user_list:
+        user_list.write(username + '|')
 
 
 def get_message(user_name):
-    text1 = 'OwO, what\'s this? \n\n *pounces on ' + str(user_name) + '*'
-    text2 = '\n\n&nbsp;\n\n I heard you say e621, so have some free, porn, compliments of e621. (obviously nsfw) \n\n'
-    text3 = get_link()
-    text_break = '---'
-    text4 = '\n\n&nbsp;\n\n^^^^I ^^^^am ^^^^a ^^^^bot, ' \
-            '^^^^this ^^^^is ^^^^done ^^^^automatically ^^^^in ^^^^furry_irl.' \
-            ' ^^^^What ^^^^porn ^^^^I ^^^^post ^^^^is ^^^^random'
-    text5 = '\n^^^^I ^^^^was ^^^^written ^^^^as ^^^^part ^^^^of ^^^^a ^^^^joke, ' \
-            '^^^^but ^^^^as ^^^^that ^^^^joke ^^^^failed, ' \
-            '^^^^I ^^^^was ^^^^repurposed ^^^^for ^^^^another ^^^^joke.'
-    text6 = '\n^^^^if ^^^^the ^^^^bot ^^^^goes ^^^^rogue ^^^^or ^^^^the ^^^^mods ^^^^of' \
-            ' ^^^^furry_irl ^^^^want ^^^^it ^^^^shut ^^^^down,' \
-            ' ^^^^shoot ^^^^a ^^^^message ^^^^to ^^^^Pixel871'
-    text7 = '\n^^^^To ^^^^blacklist ^^^^yourself, ^^^^say ^^^^\'furbot stop\''
-    full_message = text1 + text2 + text3 + text_break + text4 + text5 + text6 + text7
+    body = ('OwO, what\'s this? \n\n *pounces on ' + str(user_name) + '*'
+        '\n\n&nbsp;\n\n I heard you say e621, so have some free, porn, '
+        'compliments of e621. (obviously nsfw) \n\n' + get_link() + '\n\n'
+        '---\n\n'
+        )
+    footer = ('I am a bot, this is done automatically in furry_irl. What porn '
+        'I post is random I was written as part of a joke, but as that joke '
+        'failed, I was repurposed for another joke. if the bot goes rogue, '
+        'shoot a message to Pixel871. '
+        'To blacklist yourself, say "furbot stop".')
+
+    # split() returns a list of words, join() puts it back together
+    full_message = body + " ^^^".join(footer.split())
     return full_message
 
 
