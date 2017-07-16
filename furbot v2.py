@@ -101,7 +101,7 @@ def get_message(user_name, mode, search_tags):
                 )
     if mode == 'search':
         tag_list = ' '.join(search_tags)
-        body = ('Hi,' + str(user_name) + '. Here is the results for your search for these search tags:'
+        body = ('Hi, ' + str(user_name) + '. Here is the results for your search for these search tags:'
                 ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags), mode) + '\n\n'
                 '---\n\n')
     if mode == 'denied':
@@ -142,7 +142,6 @@ def search(search_tags):
     taglist = '+'.join(search_tags)
     blacklist = '+-gore+-scat+-feral+-cub'
     url = basic_url + taglist + blacklist
-    print(url)
     return url
 
 
