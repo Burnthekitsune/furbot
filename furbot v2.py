@@ -112,3 +112,5 @@ for comment in comments:
         if check_user(author):
             remove_user(author)
             print(str(author) + ' has been blacklisted')
+    if str(author) == 'furbot_' and comment.score < 0:
+        comment.delete()
