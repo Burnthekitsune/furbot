@@ -3,6 +3,7 @@ import requests
 import time
 
 # it sort of works XD
+# thanks for silentclowd for code help
 
 bot = praw.Reddit(user_agent='Fur Bot v2',
                   client_id='w0VJv_O15uALXw',
