@@ -4,11 +4,18 @@ import time
 
 # it sort of works XD
 
-bot = praw.Reddit(user_agent='Fur Bot v2',
-                  client_id='w0VJv_O15uALXw',
-                  client_secret='secret',
-                  username='furbot_',
-                  password='password')
+def getsecret():
+    try:
+        with open('secret.txt', 'r') as file:
+            return file.readline().strip()
+    except FileNotFoundError:
+        print("Secret not found.")
+
+bot = praw.Reddit(user_agent = 'Fur Bot v2',
+                  client_id = 'w0VJv_O15uALXw',
+                  client_secret = getsecret(),
+                  username = 'furbot_',
+                  password = 'password')
 
 print(str(bot.user.me()) + ' is now running...')
 
