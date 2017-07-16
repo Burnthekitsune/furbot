@@ -3,7 +3,6 @@ import requests
 import time
 
 # it sort of works XD
-# thanks for silentclowd for code help
 
 bot = praw.Reddit(user_agent='Fur Bot v2',
                   client_id='w0VJv_O15uALXw',
@@ -51,17 +50,22 @@ def get_link():
 
 
 def check_user(user):
-    with open('userlist.txt', 'r') as file:
-        username = str(user)
-        for line in file:
-            if username in line:
-                return False
+    file = open('userlist.txt', 'r')
+    username = str(user)
+    for line in file:
+        if username in line:
+            file.close()
+            return False
+        else:
+            file.close()
+            return True
 
 
 def remove_user(user):
     username = str(user)
-    with open('userlist.txt', 'a') as user_list:
-        user_list.write(username + '|')
+    user_list = open('userlist.txt', 'a')
+    user_list.write(username + '|')
+    user_list.close()
 
 
 def get_message(user_name):
@@ -86,7 +90,6 @@ def add_id(id_to_add):
     add.write(str(id_to_add) + '|')
     add.close()
 
-
 for comment in comments:
     text = comment.body
     author = comment.author
@@ -109,8 +112,3 @@ for comment in comments:
         if check_user(author):
             remove_user(author)
             print(str(author) + ' has been blacklisted')
-            comment.reply('Adding you to the blacklist, as you request')
-            add_id(comment_id)
-    if str(author) == 'furbot_' and comment.score < 0:
-        comment.delete()
-
