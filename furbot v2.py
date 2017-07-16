@@ -4,18 +4,27 @@ import time
 
 # it sort of works XD
 
-def getsecret():
+
+def get_secret():
     try:
         with open('secret.txt', 'r') as file:
             return file.readline().strip()
     except FileNotFoundError:
         print("Secret not found.")
 
-bot = praw.Reddit(user_agent = 'Fur Bot v2',
-                  client_id = 'w0VJv_O15uALXw',
-                  client_secret = getsecret(),
-                  username = 'furbot_',
-                  password = 'password')
+
+def get_password():
+    try:
+        with open('password.txt', 'r') as file:
+            return file.readline().strip()
+    except FileNotFoundError:
+        print("Password not found.")
+
+bot = praw.Reddit(user_agent='Fur Bot v2',
+                  client_id='w0VJv_O15uALXw',
+                  client_secret=get_secret(),
+                  username='furbot_',
+                  password=get_password())
 
 print(str(bot.user.me()) + ' is now running...')
 
@@ -81,7 +90,7 @@ def get_message(user_name):
             'compliments of e621. (obviously nsfw) \n\n' + get_link() + '\n\n'
             '---\n\n'
             )
-    footer = ('I am a bot, this is done automatically in furry_irl. What porn '
+    footer = (' I am a bot, this is done automatically in furry_irl. What porn '
               'I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
               'shoot a message to Pixel871. '
@@ -105,7 +114,7 @@ for comment in comments:
         has_commented = False
     if 'e621' in text.lower():
         comment_id = comment.id
-        if 'http' in text.lower():
+        if 'http' in text.lower() and check_id(comment_id):
             add_id(comment_id)
         else:
             if check_id(comment_id) and check_user(author):
