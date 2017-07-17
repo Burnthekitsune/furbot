@@ -65,7 +65,7 @@ def get_link(check_url, mode):
         if mode == 'e621':
             return 'And error has occurred, e621 may be down'
         if mode == 'search':
-            return 'no results found, you may have an invalid tag'
+            return 'no results found, you may have an invalid tag. Or all posts for your tags have a score below 100'
     else:
         clipped = contents[number:]
         number_two = clipped.find('\"')
@@ -175,9 +175,12 @@ try:
                 cut_spot = full.find(command) + 14
                 cut = full[cut_spot:]
                 cut_spot = cut.find('\n')
-                final_cut = cut[:cut_spot]
-                stripped = final_cut.strip()
-                tags = stripped.split()
+                if cut_spot == -1:
+                    tags = cut.split()
+                else:
+                    final_cut = cut[:cut_spot]
+                    stripped = final_cut.strip()
+                    tags = stripped.split()
                 pure = True
                 i = 0
                 while i < len(tags) and pure:
