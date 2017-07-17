@@ -174,7 +174,9 @@ try:
                 command = 'furbot search'
                 cut_spot = full.find(command) + 14
                 cut = full[cut_spot:]
-                tags = cut.split(' ')
+                cut_spot = cut.find('\n')
+                final_cut = cut[:cut_spot]
+                tags = final_cut.split(' ')
                 pure = True
                 i = 0
                 while i < len(tags) and pure:
