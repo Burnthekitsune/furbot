@@ -176,7 +176,8 @@ try:
                 cut = full[cut_spot:]
                 cut_spot = cut.find('\n')
                 final_cut = cut[:cut_spot]
-                tags = final_cut.split(' ')
+                stripped = final_cut.strip()
+                tags = stripped.split()
                 pure = True
                 i = 0
                 while i < len(tags) and pure:
