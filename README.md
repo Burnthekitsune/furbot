@@ -1,6 +1,6 @@
 # furbot
 
-It just posts porn on the e621 subreddit when people say e621
+It just posts porn on the furry_irl subreddit when people say e621
 
 Also it has a search feature, just say furbot search and then say some tags. -tags work as well
 
