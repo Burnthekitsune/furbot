@@ -184,12 +184,18 @@ try:
                     message = get_message(author, 'search', tags)
                     comment.reply(message)
                     add_id(comment_id)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
                 else:
                     message = get_message(author, 'denied', tags)
                     comment.reply(message)
                     add_id(comment_id)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
         if str(author) == 'furbot_' and comment.score < 0:
             comment.delete()
 except urllib.error.URLError as e:
     print('waiting...')
-    wait(60)
+    wait()
