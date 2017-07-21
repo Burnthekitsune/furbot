@@ -107,6 +107,8 @@ def get_message(user_name, mode, search_tags):
     if mode == 'denied':
         body = ('Oops! Mod Daddy will beat me if I search something like that! Sorry!)' + '\n\n'
                 '---\n\n')
+    if mode == 'blacklist':
+        body = 'You have been blacklisted. Message Pixel871 if you want messages from the bot again \n\n---\n\n'
     footer = ('&nbsp; I am a bot, this is done automatically in furry_irl. What porn '
               'I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
@@ -168,6 +170,8 @@ try:
             if check_user(author):
                 remove_user(author)
                 print(str(author) + ' has been blacklisted')
+                message = get_message(author, 'blacklist', '')
+                comment.reply(message)
         if 'furbot search' in text.lower():
             if check_id(comment_id) and check_user(author):
                 full = str(comment.body)
@@ -201,6 +205,7 @@ try:
                     print(comment_count)
                     wait()
         if str(author) == 'furbot_' and comment.score < 0:
+            print('comment delete')
             comment.delete()
 except urllib.error.URLError as e:
     print('waiting...')
