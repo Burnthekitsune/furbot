@@ -42,7 +42,7 @@ search_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+-go
 
 
 def wait():
-    time.sleep(600)
+    time.sleep(300)
 
 
 def check_id(given_id):
