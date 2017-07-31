@@ -95,7 +95,7 @@ def remove_user(user):
 def get_message(user_name, mode, search_tags):
     if mode == 'e621':
         body = ('OwO, what\'s this? \n\n *pounces on ' + str(user_name) + '*'
-                '\n\n&nbsp;\n\n I heard you say e621, so have some free, porn, '
+                '\n\n&nbsp;\n\n I heard you say e621, so have some free porn, '
                 'compliments of e621. (obviously nsfw) \n\n' + get_link(search_url, mode) + '\n\n'
                 '---\n\n'
                 )
@@ -155,23 +155,6 @@ try:
         if has_commented:
             wait()
             has_commented = False
-        if 'e621' in text.lower():
-            if 'http' in text.lower() and check_id(comment_id):
-                add_id(comment_id)
-            else:
-                if check_id(comment_id) and check_user(author):
-                    has_commented = True
-                    comment_count += 1
-                    print(comment_count)
-                    message = get_message(author, 'e621', '')
-                    comment.reply(message)
-                    add_id(comment_id)
-        if 'furbot stop' in text.lower():
-            if check_user(author):
-                remove_user(author)
-                print(str(author) + ' has been blacklisted')
-                message = get_message(author, 'blacklist', '')
-                comment.reply(message)
         if 'furbot search' in text.lower():
             if check_id(comment_id) and check_user(author):
                 full = str(comment.body)
@@ -204,6 +187,23 @@ try:
                     comment_count += 1
                     print(comment_count)
                     wait()
+        if 'e621' in text.lower():
+            if 'http' in text.lower() and check_id(comment_id):
+                add_id(comment_id)
+            else:
+                if check_id(comment_id) and check_user(author):
+                    has_commented = True
+                    comment_count += 1
+                    print(comment_count)
+                    message = get_message(author, 'e621', '')
+                    comment.reply(message)
+                    add_id(comment_id)
+        if 'furbot stop' in text.lower():
+            if check_user(author):
+                remove_user(author)
+                print(str(author) + ' has been blacklisted')
+                message = get_message(author, 'blacklist', '')
+                comment.reply(message)
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
