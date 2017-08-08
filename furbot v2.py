@@ -31,14 +31,11 @@ bot = praw.Reddit(user_agent='Fur Bot v2',
 print(str(bot.user.me()) + ' is now running...')
 
 subreddit = bot.subreddit('furry_irl')
-
 comments = subreddit.stream.comments()
-
 comment_count = 0
-
 has_commented = False
-
-search_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+-gore+-scat+-feral+-cub+score%3A%3E100'
+search_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+-gore+-scat+-feral+-cub+score%3A%3E50'
+sfw_search_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+-mlp+-gore+-scat+-feral+-cub+score%3A%3E50'
 
 
 def wait():
@@ -62,14 +59,16 @@ def get_link(check_url, mode):
     sample = 'http://e621.net/post/show/'
     number = contents.find(sample)
     if number < 0:
-        if mode == 'e621':
-            return 'And error has occurred, e621 may be down'
+        if mode == 'e621' or 'e926':
+            return 'An error has occurred, ' + mode + ' may be down'
         if mode == 'search':
-            return 'no results found, you may have an invalid tag. Or all posts for your tags have a score below 100'
+            return 'no results found, you may have an invalid tag. Or all posts for your tags have a score below 50'
     else:
         clipped = contents[number:]
         number_two = clipped.find('\"')
         url = clipped[:number_two]
+        if mode == 'e926':
+            url = url.replace('e621', 'e926')
         return url
 
 
@@ -99,13 +98,19 @@ def get_message(user_name, mode, search_tags):
                 'compliments of e621. (obviously nsfw) \n\n' + get_link(search_url, mode) + '\n\n'
                 '---\n\n'
                 )
+    if mode == 'e926':
+        body = ('Hello! :3 \n\n *hugs ' + str(user_name) + '*'
+                '\n\n&nbsp;\n\n I heard you say e926, so have a picture, '
+                'compliments of e926. \n\n' + get_link(sfw_search_url, mode) + '\n\n'
+                '---\n\n'
+                )
     if mode == 'search':
         tag_list = ' '.join(search_tags)
         body = ('Hi, ' + str(user_name) + '. Here is the results for your search for these search tags:'
                 ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags), mode) + '\n\n'
                 '---\n\n')
     if mode == 'denied':
-        body = ('Oops! Mod Daddy will beat me if I search something like that! Sorry!)' + '\n\n'
+        body = ('Oops! Mod Daddy will beat me if I search something like that! Sorry!' + '\n\n'
                 '---\n\n')
     if mode == 'blacklist':
         body = 'You have been blacklisted. Message Pixel871 if you want messages from the bot again \n\n---\n\n'
@@ -140,7 +145,7 @@ def check_tag(tag):
 
 
 def search(search_tags):
-    basic_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+score%3A%3E100+'
+    basic_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+score%3A%3E50+'
     taglist = '+'.join(search_tags)
     blacklist = '+-gore+-scat+-feral+-cub'
     url = basic_url + taglist + blacklist
@@ -155,6 +160,12 @@ try:
         if has_commented:
             wait()
             has_commented = False
+        if 'furbot stop' in text.lower():
+            if check_user(author):
+                remove_user(author)
+                print(str(author) + ' has been blacklisted')
+                message = get_message(author, 'blacklist', '')
+                comment.reply(message)
         if 'furbot search' in text.lower():
             if check_id(comment_id) and check_user(author):
                 full = str(comment.body)
@@ -198,12 +209,17 @@ try:
                     message = get_message(author, 'e621', '')
                     comment.reply(message)
                     add_id(comment_id)
-        if 'furbot stop' in text.lower():
-            if check_user(author):
-                remove_user(author)
-                print(str(author) + ' has been blacklisted')
-                message = get_message(author, 'blacklist', '')
-                comment.reply(message)
+        if 'e926' in text.lower():
+            if 'http' in text.lower() and check_id(comment_id):
+                add_id(comment_id)
+            else:
+                if check_id(comment_id) and check_user(author):
+                    has_commented = True
+                    comment_count += 1
+                    print(comment_count)
+                    message = get_message(author, 'e926', '')
+                    comment.reply(message)
+                    add_id(comment_id)
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
