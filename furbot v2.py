@@ -118,7 +118,8 @@ def get_message(user_name, mode, search_tags):
               'I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
               'shoot a message to Pixel871. '
-              'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted.')
+              'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted. '
+              '[Commands and info](https://pastebin.com/JLwSbwQ3)')
 
     # split() returns a list of words, join() puts it back together
     full_message = body + " ^^^".join(footer.split())
