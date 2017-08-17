@@ -46,7 +46,8 @@ def wait():
 def get_blacklist():
     full_list = open(tag_file).read()
     split_list = full_list.split('|')
-    return split_list
+    finished_list = list(filter(None, split_list))
+    return finished_list
 
 
 def check_id(given_id):
@@ -283,10 +284,13 @@ try:
                 banned_tag_list = get_blacklist()
                 if newly_banned_tags != '':
                     message = get_message(author, 'ban', newly_banned_tags, '')
+                    print('banned ' + newly_banned_tags)
                 else:
                     message = get_message(author, 'ban fail', newly_banned_tags, '')
+                add_id(comment_id)
             else:
                 message = get_message(author, 'not approved', '', '')
+                add_id(comment_id)
 except urllib.error.URLError as e:
     print('waiting...')
     wait()
