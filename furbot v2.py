@@ -257,7 +257,7 @@ try:
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
-        if 'furbot ban' in text.lower and check_approved(author) and check_id(comment_id):
+        if 'furbot ban' in text.lower() and check_approved(author) and check_id(comment_id):
             command = 'furbot ban'
             cut_spot = full.find(command) + 14
             cut = full[cut_spot:]
