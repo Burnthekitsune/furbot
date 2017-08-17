@@ -139,6 +139,8 @@ def get_message(user_name, mode, search_tags, banned_tag):
         body = 'Successfully banned ' + search_tags
     if mode == 'ban fail':
         body = 'Failed to add to ban list, all tags are on list.'
+    if mode == 'not approved':
+        body = 'I\'m sorry ' + author + ', I\'m afraid I can\'t do that'
     footer = ('&nbsp; I am a bot, this is done automatically in furry_irl. What porn '
               'I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
@@ -257,31 +259,34 @@ try:
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
-        if 'furbot ban' in text.lower() and check_approved(author) and check_id(comment_id):
-            command = 'furbot ban'
-            cut_spot = full.find(command) + 14
-            cut = full[cut_spot:]
-            cut_spot = cut.find('\n')
-            if cut_spot == -1:
-                tags = cut.split()
+        if 'furbot ban' in text.lower() and check_id(comment_id):
+            if check_approved(author):
+                command = 'furbot ban'
+                cut_spot = full.find(command) + 14
+                cut = full[cut_spot:]
+                cut_spot = cut.find('\n')
+                if cut_spot == -1:
+                    tags = cut.split()
+                else:
+                    final_cut = cut[:cut_spot]
+                    stripped = final_cut.strip()
+                    tags = stripped.split()
+                    tags = [i for i in tags if i != '']
+                i = 0
+                newly_banned_tags = ''
+                while i < len(tags):
+                    new_tag = check_tag(tags[i], banned_tag_list)
+                    if new_tag:
+                        add_to_blacklist(tags[i])
+                        newly_banned_tags += tags[i] + ' '
+                    i += 1
+                banned_tag_list = get_blacklist()
+                if newly_banned_tags != '':
+                    message = get_message(author, 'ban', newly_banned_tags, '')
+                else:
+                    message = get_message(author, 'ban fail', newly_banned_tags, '')
             else:
-                final_cut = cut[:cut_spot]
-                stripped = final_cut.strip()
-                tags = stripped.split()
-                tags = [i for i in tags if i != '']
-            i = 0
-            newly_banned_tags = ''
-            while i < len(tags):
-                new_tag = check_tag(tags[i], banned_tag_list)
-                if new_tag:
-                    add_to_blacklist(tags[i])
-                    newly_banned_tags += tags[i] + ' '
-                i += 1
-            banned_tag_list = get_blacklist()
-            if newly_banned_tags != '':
-                message = get_message(author, 'ban', newly_banned_tags, '')
-            else:
-                message = get_message(author, 'ban fail', newly_banned_tags, '')
+                message = get_message(author, 'not approved', '', '')
 except urllib.error.URLError as e:
     print('waiting...')
     wait()
