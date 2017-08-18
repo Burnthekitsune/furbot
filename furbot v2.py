@@ -206,16 +206,17 @@ try:
             if check_id(comment_id) and check_user(author):
                 full = str(comment.body)
                 command = 'furbot search'
-                cut_spot = full.find(command) + 14
-                cut = full[cut_spot:]
-                cut_spot = cut.find('\n')
-                if cut_spot == -1:
-                    tags = cut.split()
-                else:
-                    final_cut = cut[:cut_spot]
-                    stripped = final_cut.strip()
-                    tags = stripped.split()
-                    tags = [i for i in tags if i != '']
+                lines = full.split('\n')
+                i = 0
+                found_command = False
+                while i < len(lines) and not found_command:
+                    current_line = lines[i].find(command)
+                    if current_line != -1:
+                        command_line = lines[current_line]
+                        found_command = True
+                cut_spot = command_line.find(command) + 14
+                cut = command_line[cut_spot:]
+                tags = cut.split()
                 pure = True
                 i = 0
                 while i < len(tags) and pure:
