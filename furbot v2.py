@@ -210,11 +210,11 @@ try:
                 i = 0
                 found_command = False
                 while i < len(lines) and not found_command:
-                    current_line = lines[i].find(command)
+                    current_line = lines[i].lower().find(command)
                     if current_line != -1:
                         command_line = lines[current_line]
                         found_command = True
-                cut_spot = command_line.find(command) + 14
+                cut_spot = command_line.lower().find(command) + 14
                 cut = command_line[cut_spot:]
                 tags = cut.split()
                 pure = True
@@ -264,7 +264,7 @@ try:
         if 'furbot ban' in text.lower() and check_id(comment_id):
             if check_approved(author):
                 command = 'furbot ban'
-                cut_spot = full.find(command) + 14
+                cut_spot = full.lower().find(command) + 14
                 cut = full[cut_spot:]
                 cut_spot = cut.find('\n')
                 if cut_spot == -1:
