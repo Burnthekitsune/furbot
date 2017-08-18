@@ -70,7 +70,7 @@ def get_link(check_url, mode):
         if mode == 'search':
             return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 50'
                     '\n It is also possible no posts have an explicit rating, this bot search for that bt default.')
-        if mode == 'e621' or 'e926':
+        if mode == 'e621' or mode == 'e926':
             return 'An error has occurred, ' + mode + ' may be down'
     else:
         clipped = contents[number:]
