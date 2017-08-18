@@ -40,7 +40,7 @@ tag_file = 'bannedtags.txt'
 
 
 def wait():
-    time.sleep(300)
+    time.sleep(150)
 
 
 def get_blacklist():
@@ -67,10 +67,11 @@ def get_link(check_url, mode):
     sample = 'http://e621.net/post/show/'
     number = contents.find(sample)
     if number < 0:
+        if mode == 'search':
+            return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 50'
+                    '\n It is also possible no posts have an explicit rating, this bot search for that bt default.')
         if mode == 'e621' or 'e926':
             return 'An error has occurred, ' + mode + ' may be down'
-        if mode == 'search':
-            return 'no results found, you may have an invalid tag. Or all posts for your tags have a score below 50'
     else:
         clipped = contents[number:]
         number_two = clipped.find('\"')
