@@ -1,5 +1,3 @@
-import urllib
-
 import praw
 import requests
 import time
@@ -148,7 +146,8 @@ def get_message(user_name, mode, search_tags, banned_tag):
               'failed, I was repurposed for another joke. if the bot goes rogue, '
               'shoot a message to Pixel871. '
               'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted. \n\n'
-              '[Commands&info](https://pastebin.com/JLwSbwQ3)')
+              'Check out my [profile](https://www.reddit.com/user/furbot_/) for commands'
+              ', bug reports, feature requests, and news')
     # split() returns a list of words, join() puts it back together
     full_message = body + " ^^^".join(footer.split())
     return full_message
@@ -293,6 +292,6 @@ try:
             else:
                 message = get_message(author, 'not approved', '', '')
                 add_id(comment_id)
-except urllib.error.URLError as e:
+except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
