@@ -136,11 +136,11 @@ def get_message(user_name, mode, search_tags, banned_tag):
     if mode == 'blacklist':
         body = 'You have been blacklisted. Message Pixel871 if you want messages from the bot again \n\n---\n\n'
     if mode == 'ban':
-        body = 'Successfully banned ' + search_tags
+        body = 'Successfully banned ' + search_tags + '\n\n---\n\n'
     if mode == 'ban fail':
-        body = 'Failed to add to ban list, all tags are on list.'
+        body = 'Failed to add to ban list, all tags are on list.\n\n---\n\n'
     if mode == 'not approved':
-        body = 'I\'m sorry ' + author + ', I\'m afraid I can\'t do that'
+        body = 'I\'m sorry ' + str(author) + ', I\'m afraid I can\'t do that. \n\n---\n\n'
     footer = ('&nbsp; I am a bot, this is done automatically in furry_irl. What porn '
               'I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
@@ -286,12 +286,18 @@ try:
                 if newly_banned_tags != '':
                     message = get_message(author, 'ban', newly_banned_tags, '')
                     print('banned ' + newly_banned_tags)
+                    comment.reply(message)
                 else:
                     message = get_message(author, 'ban fail', newly_banned_tags, '')
                 add_id(comment_id)
+                comment.reply(message)
             else:
                 message = get_message(author, 'not approved', '', '')
+                comment.reply(message)
                 add_id(comment_id)
+                comment_count += 1
+                print(comment_count)
+                has_commented = True
 except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
