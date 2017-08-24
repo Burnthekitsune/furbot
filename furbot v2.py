@@ -252,7 +252,7 @@ try:
                 message = get_message(author, 'e621', '', banned_tag_list)
                 comment.reply(message)
                 add_id(comment_id)
-        if 'e926' in text.lower()  and 'http' not in text.lower():
+        if 'e926' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
                 has_commented = True
                 comment_count += 1
@@ -261,12 +261,13 @@ try:
                 comment.reply(message)
                 add_id(comment_id)
         if 'wolfthorn' in text.lower():
-            has_commented = True
-            comment_count += 1
-            print(comment_count)
-            message = get_message(author, 'wolfthorn', '', banned_tag_list)
-            comment.reply(message)
-            add_id(comment_id)
+            if check_id(comment_id) and check_user(author):
+                has_commented = True
+                comment_count += 1
+                print(comment_count)
+                message = get_message(author, 'wolfthorn', '', banned_tag_list)
+                comment.reply(message)
+                add_id(comment_id)
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
