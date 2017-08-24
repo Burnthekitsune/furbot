@@ -34,6 +34,7 @@ comment_count = 0
 has_commented = False
 basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E50'
 basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+-mlp+score%3A%3E50'
+wolf_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25+wolfthorn_(old_spice)'
 tag_file = 'bannedtags.txt'
 
 
@@ -70,6 +71,8 @@ def get_link(check_url, mode):
                     '\n It is also possible no posts have an explicit rating, this bot search for that bt default.')
         if mode == 'e621' or mode == 'e926':
             return 'An error has occurred, ' + mode + ' may be down'
+        if mode == 'wolfthorn':
+            return 'Oops, Wolfthorn cannot be found. He must be in the shower or something.'
     else:
         clipped = contents[number:]
         number_two = clipped.find('\"')
@@ -141,6 +144,11 @@ def get_message(user_name, mode, search_tags, banned_tag):
         body = 'Failed to add to ban list, all tags are on list.\n\n---\n\n'
     if mode == 'not approved':
         body = 'I\'m sorry ' + str(author) + ', I\'m afraid I can\'t do that. \n\n---\n\n'
+    if mode == 'wolfthorn':
+        body = ('OwO Did I hear you mention Wolfthorn? \n\n&nbsp;\n\n Here is a picture of him '
+                'compliments of e621. (obviously nsfw) \n\n' + get_link(wolf_link, mode) + '\n\n'
+                '---\n\n'
+                )
     footer = ('&nbsp; I am a bot, this is done automatically in furry_irl. What porn '
               'I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
@@ -236,28 +244,29 @@ try:
                     comment_count += 1
                     print(comment_count)
                     wait()
-        if 'e621' in text.lower():
-            if 'http' in text.lower() and check_id(comment_id):
+        if 'e621' in text.lower() and 'http' not in text.lower():
+            if check_id(comment_id) and check_user(author):
+                has_commented = True
+                comment_count += 1
+                print(comment_count)
+                message = get_message(author, 'e621', '', banned_tag_list)
+                comment.reply(message)
                 add_id(comment_id)
-            else:
-                if check_id(comment_id) and check_user(author):
-                    has_commented = True
-                    comment_count += 1
-                    print(comment_count)
-                    message = get_message(author, 'e621', '', banned_tag_list)
-                    comment.reply(message)
-                    add_id(comment_id)
-        if 'e926' in text.lower():
-            if 'http' in text.lower() and check_id(comment_id):
+        if 'e926' in text.lower()  and 'http' not in text.lower():
+            if check_id(comment_id) and check_user(author):
+                has_commented = True
+                comment_count += 1
+                print(comment_count)
+                message = get_message(author, 'e926', '', banned_tag_list)
+                comment.reply(message)
                 add_id(comment_id)
-            else:
-                if check_id(comment_id) and check_user(author):
-                    has_commented = True
-                    comment_count += 1
-                    print(comment_count)
-                    message = get_message(author, 'e926', '', banned_tag_list)
-                    comment.reply(message)
-                    add_id(comment_id)
+        if 'wolfthorn' in text.lower():
+            has_commented = True
+            comment_count += 1
+            print(comment_count)
+            message = get_message(author, 'wolfthorn', '', banned_tag_list)
+            comment.reply(message)
+            add_id(comment_id)
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
