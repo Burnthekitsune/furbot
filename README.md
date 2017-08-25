@@ -20,3 +20,4 @@ Somehow I can avoid e621 tag limits.
  * scat
  * feral
  * cubs
+ * loli

@@ -260,7 +260,7 @@ try:
                 message = get_message(author, 'e926', '', banned_tag_list)
                 comment.reply(message)
                 add_id(comment_id)
-        if 'wolfthorn' in text.lower():
+        if 'wolfthorn' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
                 has_commented = True
                 comment_count += 1
