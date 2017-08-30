@@ -42,6 +42,10 @@ def wait():
     time.sleep(150)
 
 
+def is_running():
+    return True
+
+
 def get_blacklist():
     full_list = open(tag_file).read()
     split_list = full_list.split('|')
@@ -213,6 +217,7 @@ try:
         if 'furbot search' in text.lower():
             if check_id(comment_id) and check_user(author):
                 full = str(comment.body)
+                add_id(comment_id)
                 command = 'furbot search'
                 lines = full.split('\n')
                 i = 0
@@ -233,14 +238,12 @@ try:
                 if pure:
                     message = get_message(author, 'search', tags, banned_tag_list)
                     comment.reply(message)
-                    add_id(comment_id)
                     comment_count += 1
                     print(comment_count)
                     wait()
                 else:
                     message = get_message(author, 'denied', tags, banned_tag_list)
                     comment.reply(message)
-                    add_id(comment_id)
                     comment_count += 1
                     print(comment_count)
                     wait()
@@ -303,8 +306,8 @@ try:
                 comment.reply(message)
             else:
                 message = get_message(author, 'not approved', '', '')
-                comment.reply(message)
                 add_id(comment_id)
+                comment.reply(message)
                 comment_count += 1
                 print(comment_count)
                 has_commented = True
