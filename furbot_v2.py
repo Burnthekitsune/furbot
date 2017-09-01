@@ -32,8 +32,8 @@ subreddit = bot.subreddit('furry_irl')
 comments = subreddit.stream.comments()
 comment_count = 0
 has_commented = False
-basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E50'
-basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+-mlp+score%3A%3E50'
+basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25'
+basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+-mlp+score%3A%3E25'
 wolf_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25+wolfthorn_(old_spice)'
 tag_file = 'bannedtags.txt'
 
@@ -68,10 +68,12 @@ def get_link(check_url, mode):
     r = requests.get(check_url)
     contents = str(r.content)
     sample = 'http://e621.net/post/show/'
+    tag_sample = '<entry>\n      <title>'
     number = contents.find(sample)
+    tag_number = contents.find(tag_sample) + 21
     if number < 0:
         if mode == 'search':
-            return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 50'
+            return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 25'
                     '\n It is also possible no posts have an explicit rating, this bot search for that bt default.')
         if mode == 'e621' or mode == 'e926':
             return 'An error has occurred, ' + mode + ' may be down'
@@ -79,11 +81,21 @@ def get_link(check_url, mode):
             return 'Oops, Wolfthorn cannot be found. He must be in the shower or something.'
     else:
         clipped = contents[number:]
+        tag_clipped = contents[tag_number:]
         number_two = clipped.find('\"')
+        tag_number_two = tag_clipped.find('<')
         url = clipped[:number_two]
+        post_tags = tag_clipped[:tag_number_two]
         if mode == 'e926':
             url = url.replace('e621', 'e926')
-        return url
+        result = url_and_tags(url, post_tags)
+        return result
+
+
+def url_and_tags(url, post_tags):
+    tag_list = "^^^".join(post_tags.split())
+    body = '\n^^^Post ^^^Tags: '
+    return url + body + tag_list
 
 
 def check_user(user):
@@ -154,14 +166,14 @@ def get_message(user_name, mode, search_tags, banned_tag):
                 '---\n\n'
                 )
     footer = ('&nbsp; I am a bot, this is done automatically in furry_irl. What porn '
-              'I post is random I was written as part of a joke, but as that joke '
+              '^^^I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
               'shoot a message to Pixel871. '
               'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted. \n\n'
               'Check out my [profile](https://www.reddit.com/user/furbot_/) for commands'
               ', bug reports, feature requests, and news')
     # split() returns a list of words, join() puts it back together
-    full_message = body + " ^^^".join(footer.split())
+    full_message = body + "^^^".join(footer.split())
     return full_message
 
 
@@ -185,7 +197,7 @@ def apply_blacklist(banned_tags):
 
 
 def search(search_tags, banned_tags):
-    basic_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+score%3A%3E50+'
+    basic_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+score%3A%3E25+'
     taglist = '+'.join(search_tags)
     blacklist = '+-' + '+-'.join(banned_tags)
     url = basic_url + taglist + blacklist
