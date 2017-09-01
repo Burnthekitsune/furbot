@@ -68,9 +68,9 @@ def get_link(check_url, mode):
     r = requests.get(check_url)
     contents = str(r.content)
     sample = 'http://e621.net/post/show/'
-    tag_sample = '<entry>\n      <title>'
+    tag_sample = '<entry>'
     number = contents.find(sample)
-    tag_number = contents.find(tag_sample) + 21
+    tag_number = contents.find(tag_sample) + 22
     if number < 0:
         if mode == 'search':
             return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 25'
@@ -93,8 +93,9 @@ def get_link(check_url, mode):
 
 
 def url_and_tags(url, post_tags):
-    tag_list = "^^^".join(post_tags.split())
-    body = '\n^^^Post ^^^Tags: '
+    tag_list = " ^^^^".join(post_tags.split())
+    tag_list = tag_list.replace('_', '\\_')
+    body = '\n\n ^^^^Post ^^^^Tags: ^^^^'
     return url + body + tag_list
 
 
@@ -173,7 +174,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
               'Check out my [profile](https://www.reddit.com/user/furbot_/) for commands'
               ', bug reports, feature requests, and news')
     # split() returns a list of words, join() puts it back together
-    full_message = body + "^^^".join(footer.split())
+    full_message = body + " ^^^".join(footer.split())
     return full_message
 
 
