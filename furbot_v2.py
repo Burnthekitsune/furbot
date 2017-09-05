@@ -350,6 +350,10 @@ try:
                 comment_count += 1
                 print(comment_count)
                 has_commented = True
+        if check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
+            if check_user(author):
+                owo_counter()
+                add_id()
 except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
