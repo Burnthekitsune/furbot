@@ -95,7 +95,8 @@ def get_link(check_url, mode):
 def url_and_tags(url, post_tags):
     tag_list = " ^^^^".join(post_tags.split())
     tag_list = tag_list.replace('_', '\\_')
-    body = '\n\n ^^^^Post ^^^^Tags: ^^^^'
+    tag_list = tag_list.replace('\\xc3\\xa9', 'é')
+    body = '\n\n **^^^^Post ^^^^Tags:** ^^^^'
     return url + body + tag_list
 
 
@@ -166,8 +167,8 @@ def get_message(user_name, mode, search_tags, banned_tag):
                 'compliments of e621. (obviously nsfw) \n\n' + get_link(wolf_link, mode) + '\n\n'
                 '---\n\n'
                 )
-    footer = ('&nbsp; I am a bot, this is done automatically in furry_irl. What porn '
-              '^^^I post is random I was written as part of a joke, but as that joke '
+    footer = ('^^^OwO Count: ' + get_owo_count() + '\n\n^^^I am a bot, this is done automatically in furry_irl. What '
+              'porn I post is random I was written as part of a joke, but as that joke '
               'failed, I was repurposed for another joke. if the bot goes rogue, '
               'shoot a message to Pixel871. '
               'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted. \n\n'
@@ -210,6 +211,27 @@ def add_to_blacklist(tag):
     taglist.write(str(tag) + '|')
     taglist.close()
 
+
+def owo_counter():
+    owo_number = get_owo_count()
+    owo_number += 1
+    file = open('owo.txt', 'w')
+    file.write(owo_number)
+    file.close()
+
+
+def get_owo_count():
+    file = open('owo.txt', 'r')
+    owo_number = file.readline()
+    file.close()
+    return owo_number
+
+
+def check_owo(body):
+    if 'owo' in body.lower():
+        get_owo_count()
+
+
 try:
     banned_tag_list = get_blacklist()
     link = basic_link + apply_blacklist(banned_tag_list)
@@ -229,6 +251,7 @@ try:
                 comment.reply(message)
         if 'furbot search' in text.lower():
             if check_id(comment_id) and check_user(author):
+                check_owo(text)
                 full = str(comment.body)
                 add_id(comment_id)
                 command = 'furbot search'
@@ -262,6 +285,7 @@ try:
                     wait()
         if 'e621' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
+                check_owo(text)
                 has_commented = True
                 comment_count += 1
                 print(comment_count)
@@ -270,6 +294,7 @@ try:
                 add_id(comment_id)
         if 'e926' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
+                check_owo(text)
                 has_commented = True
                 comment_count += 1
                 print(comment_count)
@@ -278,6 +303,7 @@ try:
                 add_id(comment_id)
         if 'wolfthorn' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
+                check_owo(text)
                 has_commented = True
                 comment_count += 1
                 print(comment_count)
