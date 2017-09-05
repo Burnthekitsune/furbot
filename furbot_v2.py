@@ -228,7 +228,7 @@ def get_owo_count():
 
 
 def check_owo(body):
-    if 'owo' in body.lower():
+    if 'owo' in body.lower() or '0w0' in body.lower():
         get_owo_count()
 
 
