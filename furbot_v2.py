@@ -213,10 +213,10 @@ def add_to_blacklist(tag):
 
 
 def owo_counter():
-    owo_number = get_owo_count()
+    owo_number = int(get_owo_count())
     owo_number += 1
     file = open('owo.txt', 'w')
-    file.write(owo_number)
+    file.write(str(owo_number))
     file.close()
 
 
@@ -353,7 +353,7 @@ try:
         if check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
             if check_user(author):
                 owo_counter()
-                add_id()
+                add_id(comment_id)
 except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
