@@ -232,7 +232,7 @@ def get_owo_count():
 
 def check_owo(owo_comment):
     if 'owo' in owo_comment.body.lower() or '0w0' in owo_comment.body.lower():
-        owo_num = get_owo_count()
+        owo_num = int(get_owo_count())
         if owo_num % 10 == 0:
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_comment.reply(owo_message)
