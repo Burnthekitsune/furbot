@@ -20,6 +20,7 @@ def get_password():
     except FileNotFoundError:
         print("Password not found.")
 
+
 bot = praw.Reddit(user_agent='Fur Bot v2',
                   client_id='w0VJv_O15uALXw',
                   client_secret=get_secret(),
@@ -236,7 +237,8 @@ def check_owo(owo_comment):
         if owo_num % 10 == 0:
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_comment.reply(owo_message)
-            print(str(owo_comment.author) + ' has said the ' + owo_num + 'th owo!')
+            print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
+
 
 try:
     banned_tag_list = get_blacklist()
