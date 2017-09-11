@@ -234,7 +234,8 @@ def get_owo_count():
 def check_owo(owo_comment):
     if 'owo' in owo_comment.body.lower() or '0w0' in owo_comment.body.lower():
         owo_num = int(get_owo_count())
-        if owo_num % 10 == 0:
+        print('owo')
+        if owo_num % 100 == 0:
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_comment.reply(owo_message)
             print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
