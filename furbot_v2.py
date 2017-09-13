@@ -294,9 +294,11 @@ try:
                 while i < len(lines) and not found_command:
                     current_line = lines[i].lower().find(command)
                     if current_line != -1:
-                        command_line = lines[current_line]
+                        command_line = lines[i]
                         found_command = True
                     i += 1
+                command_line.replace('.', '')
+                command_line.replace(',', '')
                 cut_spot = command_line.lower().find(command) + 14
                 cut = command_line[cut_spot:]
                 tags = cut.split()
@@ -329,9 +331,11 @@ try:
                 while i < len(lines) and not found_command:
                     current_line = lines[i].lower().find(command)
                     if current_line != -1:
-                        command_line = lines[current_line]
+                        command_line = lines[i]
                         found_command = True
                     i += 1
+                command_line.replace('.', '')
+                command_line.replace(',', '')
                 cut_spot = command_line.lower().find(command) + 18
                 cut = command_line[cut_spot:]
                 tags = cut.split()
@@ -365,9 +369,11 @@ try:
                 while i < len(lines) and not found_command:
                     current_line = lines[i].lower().find(command)
                     if current_line != -1:
-                        command_line = lines[current_line]
+                        command_line = lines[i]
                         found_command = True
                     i += 1
+                command_line.replace('.', '')
+                command_line.replace(',', '')
                 cut_spot = command_line.lower().find(command) + 19
                 cut = command_line[cut_spot:]
                 tags = cut.split()
