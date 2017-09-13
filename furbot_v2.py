@@ -296,6 +296,7 @@ try:
                     if current_line != -1:
                         command_line = lines[current_line]
                         found_command = True
+                    i += 1
                 cut_spot = command_line.lower().find(command) + 14
                 cut = command_line[cut_spot:]
                 tags = cut.split()
@@ -330,6 +331,7 @@ try:
                     if current_line != -1:
                         command_line = lines[current_line]
                         found_command = True
+                    i += 1
                 cut_spot = command_line.lower().find(command) + 18
                 cut = command_line[cut_spot:]
                 tags = cut.split()
@@ -365,6 +367,7 @@ try:
                     if current_line != -1:
                         command_line = lines[current_line]
                         found_command = True
+                    i += 1
                 cut_spot = command_line.lower().find(command) + 19
                 cut = command_line[cut_spot:]
                 tags = cut.split()
