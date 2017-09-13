@@ -75,7 +75,14 @@ def get_link(check_url, mode):
     if number < 0:
         if mode == 'search':
             return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 25'
-                    '\n It is also possible no posts have an explicit rating, this bot search for that bt default.')
+                    '\n It is also possible no posts have an explicit rating, this bot search for that with this mode.')
+        if mode == 'swf search':
+            return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 25'
+                    '\n It is also possible no posts have an safe rating, this bot search for that with this mode.')
+        if mode == 'mild search':
+            return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 25'
+                    '\n It is also possible no posts have an questionable rating, this bot search for that with this'
+                    ' mode.')
         if mode == 'e621' or mode == 'e926':
             return 'An error has occurred, ' + mode + ' may be down'
         if mode == 'wolfthorn':
@@ -147,13 +154,16 @@ def get_message(user_name, mode, search_tags, banned_tag):
                 'compliments of e926. \n\n' + get_link(sfw_link, mode) + '\n\n'
                 '---\n\n'
                 )
-    if mode == 'search':
+    if mode == 'search' or mode == 'swf search' or mode == 'mild search':
         tag_list = ' '.join(search_tags)
         body = ('Hi, ' + str(user_name) + '. Here is the results for your search for these search tags:'
-                ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags, banned_tag), mode) + '\n\n'
+                ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags, banned_tag, mode), mode) + '\n\n'
                 '---\n\n')
     if mode == 'denied':
         body = ('Oops! Mod Daddy will beat me if I search something like that! Sorry!' + '\n\n'
+                '---\n\n')
+    if mode == 'denied':
+        body = ('Sorry, I am too smart to fall for that one' + '\n\n'
                 '---\n\n')
     if mode == 'blacklist':
         body = 'You have been blacklisted. Message Pixel871 if you want messages from the bot again \n\n---\n\n'
@@ -198,12 +208,25 @@ def check_tag(tag, banned_tags):
             return True
 
 
+def check_cheese(tag):
+    if 'score' in tag or 'rating' in tag:
+        return True
+    else:
+        return False
+
+
 def apply_blacklist(banned_tags):
     return '+-' + '+-'.join(banned_tags)
 
 
-def search(search_tags, banned_tags):
-    basic_url = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+score%3A%3E25+'
+def search(search_tags, banned_tags, mode):
+    basic_url = 'https://e621.net/post/atom?tags=order%3Arandom+score%3A%3E25'
+    if mode == 'search':
+        basic_url += '+rating%3Ae+'
+    if mode == 'sfw search':
+        basic_url += '+rating%3As+'
+    if mode == 'mild search':
+        basic_url += '+rating%3Aq+'
     taglist = '+'.join(search_tags)
     blacklist = '+-' + '+-'.join(banned_tags)
     url = basic_url + taglist + blacklist
@@ -232,7 +255,8 @@ def get_owo_count():
 
 
 def check_owo(owo_comment):
-    if 'owo' in owo_comment.body.lower() or '0w0' in owo_comment.body.lower():
+    owo_text = owo_comment.body
+    if 'owo' in owo_text.lower() or '0w0' in owo_text.lower():
         owo_num = int(get_owo_count())
         print('owo')
         if owo_num % 100 == 0:
@@ -288,6 +312,83 @@ try:
                     wait()
                 else:
                     message = get_message(author, 'denied', tags, banned_tag_list)
+                    comment.reply(message)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
+        if 'furbot sfw search' in text.lower():
+            if check_id(comment_id) and check_user(author):
+                check_owo(comment)
+                full = str(comment.body)
+                add_id(comment_id)
+                command = 'furbot sfw search'
+                lines = full.split('\n')
+                i = 0
+                found_command = False
+                while i < len(lines) and not found_command:
+                    current_line = lines[i].lower().find(command)
+                    if current_line != -1:
+                        command_line = lines[current_line]
+                        found_command = True
+                cut_spot = command_line.lower().find(command) + 18
+                cut = command_line[cut_spot:]
+                tags = cut.split()
+                pure = True
+                i = 0
+                while i < len(tags) and pure:
+                    pure = check_tag(tags[i], banned_tag_list)
+                    i += 1
+                if pure:
+                    message = get_message(author, 'sfw search', tags, banned_tag_list)
+                    message = message.replace('e621.net', 'e926.net')
+                    comment.reply(message)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
+                else:
+                    message = get_message(author, 'denied', tags, banned_tag_list)
+                    comment.reply(message)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
+        if 'furbot mild search' in text.lower():
+            if check_id(comment_id) and check_user(author):
+                check_owo(comment)
+                full = str(comment.body)
+                add_id(comment_id)
+                command = 'furbot mild search'
+                lines = full.split('\n')
+                i = 0
+                found_command = False
+                while i < len(lines) and not found_command:
+                    current_line = lines[i].lower().find(command)
+                    if current_line != -1:
+                        command_line = lines[current_line]
+                        found_command = True
+                cut_spot = command_line.lower().find(command) + 19
+                cut = command_line[cut_spot:]
+                tags = cut.split()
+                pure = True
+                cheese = False
+                i = 0
+                while i < len(tags) and pure and not cheese:
+                    pure = check_tag(tags[i], banned_tag_list)
+                    cheese = check_cheese(tags[i])
+                    i += 1
+                if pure and not cheese:
+                    message = get_message(author, 'mild search', tags, banned_tag_list)
+                    comment.reply(message)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
+                if not pure:
+                    message = get_message(author, 'denied', tags, banned_tag_list)
+                    comment.reply(message)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
+                if cheese:
+                    message = get_message(author, 'cheese', tags, banned_tag_list)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
