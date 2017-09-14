@@ -257,6 +257,7 @@ def get_owo_count():
 def check_owo(owo_comment):
     owo_text = owo_comment.body
     if 'owo' in owo_text.lower() or '0w0' in owo_text.lower():
+        owo_counter()
         owo_num = int(get_owo_count())
         print('owo')
         if owo_num % 100 == 0:
