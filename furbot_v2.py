@@ -101,11 +101,21 @@ def get_link(check_url, mode):
 
 
 def url_and_tags(url, post_tags):
-    tag_list = " ^^^^".join(post_tags.split())
+    full_tag_list = post_tags.split()
+    long = False
+    if len(full_tag_list) > 20:
+        long = True
+        num_of_tags = len(full_tag_list) - 20
+        full_tag_list = full_tag_list[:20]
+        extra_info = ' **^^^^And ^^^^' + num_of_tags + ' ^^^^other + ^^^^tags**A'
+    tag_list = " ^^^^".join(full_tag_list)
     tag_list = tag_list.replace('_', '\\_')
     tag_list = tag_list.replace('\\xc3\\xa9', 'é')
     body = '\n\n **^^^^Post ^^^^Tags:** ^^^^'
-    return url + body + tag_list
+    if long:
+        return url + body + tag_list + extra_info
+    else:
+        return url + body + tag_list
 
 
 def check_user(user):
@@ -182,9 +192,6 @@ def get_message(user_name, mode, search_tags, banned_tag):
         body = 'Congratulations, ' + str(author) + '! That was the **' + get_owo_count() + 'th** owo since I ' \
                 'started to track them.\n\n---\n\n'
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl.'
-              ' What porn I post is random I was written as part of a joke, but as that joke '
-              'failed, I was repurposed for another joke. if the bot goes rogue, '
-              'shoot a message to Pixel871. '
               'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted. \n\n'
               'Check out my [profile](https://www.reddit.com/user/furbot_/) for commands'
               ', bug reports, feature requests, and news')
