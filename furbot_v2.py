@@ -141,13 +141,13 @@ def check_approved(user):
 
 def bonus_message(user):
     if user == 'Pixel871':
-        return 'Hey, it is the furry trash that made me!\n'
+        return 'Hey, it is the furry trash that made me!\n\n'
     if user == 'SimStart':
-        return 'Good Bot\n'
+        return 'Good Bot\n\n'
     if user == 'PM_ME_FURRY_STUFF':
-        return ''
+        return 'OwO, what\'s this?\n\n'
     else:
-        return ''
+        return 'OwO, what\'s this?\n\n'
 
 
 def remove_user(user):
@@ -161,7 +161,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
     body = 'Something has gone horribly wrong with the code'
     bonus = bonus_message(user_name)
     if mode == 'e621':
-        body = ('OwO, what\'s this? \n\n *pounces on ' + str(user_name) + '*'
+        body = ('*pounces on ' + str(user_name) + '*'
                 '\n\n&nbsp;\n\n I heard you say e621, so have some free porn, '
                 'compliments of e621. (obviously nsfw) \n\n' + get_link(link, mode) + '\n\n'
                 '---\n\n'
