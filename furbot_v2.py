@@ -106,7 +106,7 @@ def url_and_tags(url, post_tags):
     if len(full_tag_list) > 20:
         num_of_tags = len(full_tag_list) - 20
         full_tag_list = full_tag_list[:20]
-        extra_info = ' **^^^^And ^^^^' + str(num_of_tags) + ' ^^^^other + ^^^^tags**A'
+        extra_info = '\n**^^^^And ^^^^' + str(num_of_tags) + ' ^^^^other ^^^^tags**'
     tag_list = " ^^^^".join(full_tag_list)
     tag_list = tag_list.replace('_', '\\_')
     tag_list = tag_list.replace('\\xc3\\xa9', 'é')
@@ -139,6 +139,17 @@ def check_approved(user):
             return False
 
 
+def bonus_message(user):
+    if user == 'Pixel871':
+        return 'Hey, it is the furry trash that made me!\n'
+    if user == 'SimStart':
+        return 'Good Bot\n'
+    if user == 'PM_ME_FURRY_STUFF':
+        return ''
+    else:
+        return ''
+
+
 def remove_user(user):
     username = str(user)
     user_list = open('userlist.txt', 'a')
@@ -148,6 +159,7 @@ def remove_user(user):
 
 def get_message(user_name, mode, search_tags, banned_tag):
     body = 'Something has gone horribly wrong with the code'
+    bonus = bonus_message(user_name)
     if mode == 'e621':
         body = ('OwO, what\'s this? \n\n *pounces on ' + str(user_name) + '*'
                 '\n\n&nbsp;\n\n I heard you say e621, so have some free porn, '
@@ -192,7 +204,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
               'Check out my [profile](https://www.reddit.com/user/furbot_/) for commands'
               ', bug reports, feature requests, and news')
     # split() returns a list of words, join() puts it back together
-    full_message = body + " ^^^".join(footer.split())
+    full_message = bonus + body + " ^^^".join(footer.split())
     return full_message
 
 
