@@ -140,14 +140,19 @@ def check_approved(user):
 
 
 def bonus_message(user):
-    if user == 'Pixel871':
-        return 'Hey, it is the furry trash that made me!\n\n'
-    if user == 'SimStart':
-        return 'Good Bot\n\n'
-    if user == 'PM_ME_FURRY_STUFF':
-        return 'OwO, what\'s this?\n\n'
-    else:
-        return 'OwO, what\'s this?\n\n'
+    file = open('custom_messages.txt', 'r')
+    username = str(user)
+    user_list = file.readlines()
+    found_name = False
+    response = ''
+    j = 0
+    while j < len(user_list) and not found_name:
+        message_split = user_list[j].split('|')
+        if username == message_split[0]:
+            response = message_split[1]
+            found_name = True
+        j += 1
+    return response
 
 
 def remove_user(user):
@@ -160,6 +165,11 @@ def remove_user(user):
 def get_message(user_name, mode, search_tags, banned_tag):
     body = 'Something has gone horribly wrong with the code'
     bonus = bonus_message(user_name)
+    if bonus == '':
+        if mode == 'e621':
+            bonus = 'OwO, what\'s this?\n\n'
+        if mode == 'e926':
+            bonus = 'Hello! :3\n\n'
     if mode == 'e621':
         body = ('*pounces on ' + str(user_name) + '*'
                 '\n\n&nbsp;\n\n I heard you say e621, so have some free porn, '
@@ -167,7 +177,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
                 '---\n\n'
                 )
     if mode == 'e926':
-        body = ('Hello! :3 \n\n *hugs ' + str(user_name) + '*'
+        body = ('*hugs ' + str(user_name) + '*'
                 '\n\n&nbsp;\n\n I heard you say e926, so have a picture, '
                 'compliments of e926. \n\n' + get_link(sfw_link, mode) + '\n\n'
                 '---\n\n'
@@ -319,18 +329,26 @@ try:
                 cut = command_line[cut_spot:]
                 tags = cut.split()
                 pure = True
+                cheese = False
                 i = 0
                 while i < len(tags) and pure:
                     pure = check_tag(tags[i], banned_tag_list)
+                    cheese = check_cheese(tags[i])
                     i += 1
-                if pure:
+                if pure and not cheese:
                     message = get_message(author, 'search', tags, banned_tag_list)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-                else:
+                if not pure:
                     message = get_message(author, 'denied', tags, banned_tag_list)
+                    comment.reply(message)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
+                if cheese:
+                    message = get_message(author, 'cheese', tags, banned_tag_list)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
@@ -356,19 +374,27 @@ try:
                 cut = command_line[cut_spot:]
                 tags = cut.split()
                 pure = True
+                cheese = False
                 i = 0
-                while i < len(tags) and pure:
+                while i < len(tags) and pure and not cheese:
                     pure = check_tag(tags[i], banned_tag_list)
+                    cheese = check_cheese(tags[i])
                     i += 1
-                if pure:
+                if pure and not cheese:
                     message = get_message(author, 'sfw search', tags, banned_tag_list)
                     message = message.replace('e621.net', 'e926.net')
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-                else:
+                if not pure:
                     message = get_message(author, 'denied', tags, banned_tag_list)
+                    comment.reply(message)
+                    comment_count += 1
+                    print(comment_count)
+                    wait()
+                if cheese:
+                    message = get_message(author, 'cheese', tags, banned_tag_list)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
