@@ -102,20 +102,16 @@ def get_link(check_url, mode):
 
 def url_and_tags(url, post_tags):
     full_tag_list = post_tags.split()
-    long = False
+    extra_info = ''
     if len(full_tag_list) > 20:
-        long = True
         num_of_tags = len(full_tag_list) - 20
         full_tag_list = full_tag_list[:20]
-        extra_info = ' **^^^^And ^^^^' + num_of_tags + ' ^^^^other + ^^^^tags**A'
+        extra_info = ' **^^^^And ^^^^' + str(num_of_tags) + ' ^^^^other + ^^^^tags**A'
     tag_list = " ^^^^".join(full_tag_list)
     tag_list = tag_list.replace('_', '\\_')
     tag_list = tag_list.replace('\\xc3\\xa9', 'é')
     body = '\n\n **^^^^Post ^^^^Tags:** ^^^^'
-    if long:
-        return url + body + tag_list + extra_info
-    else:
-        return url + body + tag_list
+    return url + body + tag_list + extra_info
 
 
 def check_user(user):
