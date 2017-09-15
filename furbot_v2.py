@@ -2,33 +2,39 @@ import praw
 import requests
 import time
 
-# it sort of works XD
+# Made by /u/Pixel871 with some clean-up in the code early on by /u/silentclowd.
+# it sort of works.
+# Don't worry about crashes, since this crashes a lot. That is what the .bat file is for.
 
 
+# I do not share the secret code. It is in secret.txt
 def get_secret():
     try:
         with open('secret.txt', 'r') as file:
             return file.readline().strip()
     except FileNotFoundError:
-        print("Secret not found.")
+        print("Secret not found. Please put the secret ID in the new file, secret.txt")
+        open('secret.txt', 'x')
 
 
+# Nor do I share the password. It is in password.txt
 def get_password():
     try:
         with open('password.txt', 'r') as file:
             return file.readline().strip()
     except FileNotFoundError:
-        print("Password not found.")
+        print("Password not found. Please put a password in the new file, password.txt")
+        open('password.txt', 'x')
 
-
+# The OAuth bit
 bot = praw.Reddit(user_agent='Fur Bot v2',
                   client_id='w0VJv_O15uALXw',
                   client_secret=get_secret(),
                   username='furbot_',
                   password=get_password())
-
+# A nice notice that the bot is running
 print(str(bot.user.me()) + ' is now running...')
-
+# Some default stuff
 subreddit = bot.subreddit('furry_irl')
 comments = subreddit.stream.comments()
 comment_count = 0
@@ -36,24 +42,23 @@ has_commented = False
 basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25'
 basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+-mlp+score%3A%3E25'
 wolf_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25+wolfthorn_(old_spice)'
-tag_file = 'bannedtags.txt'
 
 
+# Prevents the bot from getting spammy.
+# Has saved me when the bot replied to itself for a new function.
 def wait():
     time.sleep(60)
 
 
-def is_running():
-    return True
-
-
+# Gets the tag blacklist from the tag_file.
 def get_blacklist():
-    full_list = open(tag_file).read()
+    full_list = open('bannedtags', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
+# Checks comment ID to see if it is new.
 def check_id(given_id):
     file = open('id_list.txt', 'r')
     for line in file:
@@ -65,6 +70,7 @@ def check_id(given_id):
             return True
 
 
+# Gets a link for the bot to reply with.
 def get_link(check_url, mode):
     r = requests.get(check_url)
     contents = str(r.content)
@@ -100,6 +106,7 @@ def get_link(check_url, mode):
         return result
 
 
+# Does some cleanup to tag massive tag list and adds it to the URL and sends it back.
 def url_and_tags(url, post_tags):
     full_tag_list = post_tags.split()
     extra_info = ''
@@ -114,6 +121,7 @@ def url_and_tags(url, post_tags):
     return url + body + tag_list + extra_info
 
 
+# Checks if a user has blacklisted themselves.
 def check_user(user):
     file = open('userlist.txt', 'r')
     username = str(user)
@@ -126,7 +134,7 @@ def check_user(user):
             return True
 
 
-# Checks for people with power over the bot
+# Checks for people with power over the bot.
 def check_approved(user):
     file = open('approved_users.txt', 'r')
     username = str(user)
@@ -139,6 +147,7 @@ def check_approved(user):
             return False
 
 
+# This is for fun custom stuff with custom_messages.txt
 def bonus_message(user):
     file = open('custom_messages.txt', 'r')
     username = str(user)
@@ -155,6 +164,7 @@ def bonus_message(user):
     return response
 
 
+# Blacklists a user
 def remove_user(user):
     username = str(user)
     user_list = open('userlist.txt', 'a')
@@ -162,6 +172,7 @@ def remove_user(user):
     user_list.close()
 
 
+# This makes the reply that the bot gives, this is the real meat of the bot.
 def get_message(user_name, mode, search_tags, banned_tag):
     body = 'Something has gone horribly wrong with the code'
     bonus = bonus_message(user_name)
@@ -213,18 +224,21 @@ def get_message(user_name, mode, search_tags, banned_tag):
               'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted. \n\n'
               'Check out my [profile](https://www.reddit.com/user/furbot_/) for commands'
               ', bug reports, feature requests, and news')
-    # split() returns a list of words, join() puts it back together
     full_message = bonus + body + " ^^^".join(footer.split())
     return full_message
 
 
+# Adds an ID to the list.
+# Sadly due to PRAW, this is the best way to record comments the bot has replied to.
+# Checking comment replies doesn't always work if a comment has a lot of replies
 def add_id(id_to_add):
     add = open('id_list.txt', 'a')
     add.write(str(id_to_add) + '|')
     add.close()
 
 
-# no impure tags allowed :P
+# No impure tags allowed.
+# If a tag is blacklisted, this stops it from being searched.
 def check_tag(tag, banned_tags):
         if tag in banned_tags:
             print(tag + ' found')
@@ -233,6 +247,7 @@ def check_tag(tag, banned_tags):
             return True
 
 
+# Prevents people from altering a search parameters.
 def check_cheese(tag):
     if 'score' in tag or 'rating' in tag:
         return True
@@ -240,10 +255,12 @@ def check_cheese(tag):
         return False
 
 
+# Adds the blacklist to a search.
 def apply_blacklist(banned_tags):
     return '+-' + '+-'.join(banned_tags)
 
 
+# Does some tweaking to the search.
 def search(search_tags, banned_tags, mode):
     basic_url = 'https://e621.net/post/atom?tags=order%3Arandom+score%3A%3E25'
     if mode == 'search':
@@ -258,12 +275,14 @@ def search(search_tags, banned_tags, mode):
     return url
 
 
+# Adds a tag to the blacklist.
 def add_to_blacklist(tag):
     taglist = open('bannedtags.txt', 'a')
     taglist.write(str(tag) + '|')
     taglist.close()
 
 
+# Adds 1 owo to the counter.
 def owo_counter():
     owo_number = int(get_owo_count())
     owo_number += 1
@@ -272,6 +291,7 @@ def owo_counter():
     file.close()
 
 
+# Counts the number of owo's
 def get_owo_count():
     file = open('owo.txt', 'r')
     owo_number = file.readline()
@@ -279,6 +299,7 @@ def get_owo_count():
     return owo_number
 
 
+# Checks for owo and replies if it is divisible by 100.
 def check_owo(owo_comment):
     owo_text = owo_comment.body
     if 'owo' in owo_text.lower() or '0w0' in owo_text.lower():
@@ -291,6 +312,9 @@ def check_owo(owo_comment):
             print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
 
 
+# The bot itself.
+# Due to how I have changed it, it doesn't need the try, but as soon as I remove it, it crashes.
+# So it stays, as it doesn't alter anything.
 try:
     banned_tag_list = get_blacklist()
     link = basic_link + apply_blacklist(banned_tag_list)
