@@ -52,7 +52,7 @@ def wait():
 
 # Gets the tag blacklist from the tag_file.
 def get_blacklist():
-    full_list = open('bannedtags', 'r').read()
+    full_list = open('bannedtags.txt', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
