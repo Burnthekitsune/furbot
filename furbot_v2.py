@@ -158,7 +158,7 @@ def bonus_message(user):
     while j < len(user_list) and not found_name:
         message_split = user_list[j].split('|')
         if username == message_split[0]:
-            response = message_split[1]
+            response = message_split[1] + '\n\n'
             found_name = True
         j += 1
     return response
@@ -174,7 +174,7 @@ def remove_user(user):
 
 # This makes the reply that the bot gives, this is the real meat of the bot.
 def get_message(user_name, mode, search_tags, banned_tag):
-    body = 'Something has gone horribly wrong with the code'
+    body = 'Something has gone horribly wrong with the code!\n\n---\n\n'
     bonus = bonus_message(user_name)
     if bonus == '':
         if mode == 'e621':
@@ -193,7 +193,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
                 'compliments of e926. \n\n' + get_link(sfw_link, mode) + '\n\n'
                 '---\n\n'
                 )
-    if mode == 'search' or mode == 'swf search' or mode == 'mild search':
+    if mode == 'search' or mode == 'sfw search' or mode == 'mild search':
         tag_list = ' '.join(search_tags)
         body = ('Hi, ' + str(user_name) + '. Here is the results for your search for these search tags:'
                 ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags, banned_tag, mode), mode) + '\n\n'
@@ -305,7 +305,6 @@ def check_owo(owo_comment):
     if 'owo' in owo_text.lower() or '0w0' in owo_text.lower():
         owo_counter()
         owo_num = int(get_owo_count())
-        print('owo')
         if owo_num % 100 == 0:
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_comment.reply(owo_message)
