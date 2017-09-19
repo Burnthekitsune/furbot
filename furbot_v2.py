@@ -26,12 +26,15 @@ def get_password():
         print("Password not found. Please put a password in the new file, password.txt")
         open('password.txt', 'x')
 
+
 # The OAuth bit
 bot = praw.Reddit(user_agent='Fur Bot v2',
                   client_id='w0VJv_O15uALXw',
                   client_secret=get_secret(),
                   username='furbot_',
                   password=get_password())
+
+
 # A nice notice that the bot is running
 print(str(bot.user.me()) + ' is now running...')
 # Some default stuff
