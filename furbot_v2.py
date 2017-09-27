@@ -110,7 +110,8 @@ def get_link(check_url, mode):
         source_number_two = source_clipped.find('\"')
         url = clipped[:number_two]
         post_tags = tag_clipped[:tag_number_two]
-        source = source_clipped[:source_number_two]
+        basic_source = source_clipped[:source_number_two]
+        source = get_source(url, basic_source)
         if mode == 'e926':
             url = url.replace('e621', 'e926')
             source = source.replace('e621', 'e926')
@@ -118,6 +119,25 @@ def get_link(check_url, mode):
         source = source.replace('http://', 'https://')
         result = url_and_tags(url, source, post_tags)
         return result
+
+
+# Helper method to find the direct url of the post
+def get_source(post_url, sample):
+    r = requests.get(post_url)
+    contents = str(r.content)
+    basic_sample = '/preview/'
+    post_id_cut_spot = sample.find(basic_sample) + 9
+    post_id_part = sample[post_id_cut_spot:]
+    post_id_cut_spot_two = post_id_part.find('.')
+    post_id = post_id_part[:post_id_cut_spot_two]
+    id_length = len(post_id)
+    contents_cut_spot = contents.find(post_id)
+    contents_cut = contents[contents_cut_spot + id_length + 10:]
+    contents_cut_spot = contents_cut.find('https://static1.e621.net/data/' + post_id)
+    contents_cut_more = contents_cut[contents_cut_spot:]
+    contents_cut_spot = contents_cut_more.find('\"')
+    contents_final_cut = contents_cut_more[:contents_cut_spot]
+    return contents_final_cut
 
 
 # Does some cleanup to tag massive tag list and adds it to the URL and sends it back.
