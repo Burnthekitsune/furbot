@@ -82,8 +82,10 @@ def get_link(check_url, mode):
     contents = str(r.content)
     sample = 'http://e621.net/post/show/'
     tag_sample = '<entry>'
+    source_sample = 'https://static'
     number = contents.find(sample)
     tag_number = contents.find(tag_sample) + 22
+    source_number = contents.find(source_sample)
     if number < 0:
         if mode == 'search':
             return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 25'
@@ -102,18 +104,24 @@ def get_link(check_url, mode):
     else:
         clipped = contents[number:]
         tag_clipped = contents[tag_number:]
+        source_clipped = contents[source_number]
         number_two = clipped.find('\"')
         tag_number_two = tag_clipped.find('<')
+        source_number_two = source_clipped.find('\"')
         url = clipped[:number_two]
         post_tags = tag_clipped[:tag_number_two]
+        source = source_clipped[:source_number_two]
         if mode == 'e926':
             url = url.replace('e621', 'e926')
-        result = url_and_tags(url, post_tags)
+            source = source.replace('e621', 'e926')
+        url = url.replace('http://', 'https://')
+        source = source.replace('http://', 'https://')
+        result = url_and_tags(url, source, post_tags)
         return result
 
 
 # Does some cleanup to tag massive tag list and adds it to the URL and sends it back.
-def url_and_tags(url, post_tags):
+def url_and_tags(url, source, post_tags):
     full_tag_list = post_tags.split()
     extra_info = ''
     if len(full_tag_list) > 20:
@@ -124,7 +132,9 @@ def url_and_tags(url, post_tags):
     tag_list = tag_list.replace('_', '\\_')
     tag_list = tag_list.replace('\\xc3\\xa9', 'é')
     body = '\n\n **^^^^Post ^^^^Tags:** ^^^^'
-    return url + body + tag_list + extra_info
+    post_url = '[Post](' + str(url) + ') | '
+    source_url = '[Direct Link](' + str(source) + ')'
+    return post_url + source_url + body + tag_list + extra_info
 
 
 # Checks if a user has blacklisted themselves.
