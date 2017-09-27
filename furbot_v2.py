@@ -104,7 +104,7 @@ def get_link(check_url, mode):
     else:
         clipped = contents[number:]
         tag_clipped = contents[tag_number:]
-        source_clipped = contents[source_number]
+        source_clipped = contents[source_number:]
         number_two = clipped.find('\"')
         tag_number_two = tag_clipped.find('<')
         source_number_two = source_clipped.find('\"')
