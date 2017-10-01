@@ -345,6 +345,11 @@ def check_owo(owo_comment):
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_comment.reply(owo_message)
             print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
+        if owo_num == 621:
+            owo_message = get_message(comment.author, 'owo', '', '')
+            owo_message.replace('them.\n\n', 'them.\n\n This is a special owo,'
+                                ' /u/Pixel871 will fill you in on the details of the minor prize.\n\n')
+            owo_comment.reply(owo_message)
 
 
 # The bot itself.
