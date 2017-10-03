@@ -349,6 +349,7 @@ def check_owo(owo_comment):
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_message.replace('them.\n\n', 'them.\n\n This is a special owo,'
                                 ' /u/Pixel871 will fill you in on the details of the minor prize.\n\n')
+            owo_message.replace('621th', '621st')
             owo_comment.reply(owo_message)
 
 
