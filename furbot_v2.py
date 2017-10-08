@@ -1,17 +1,12 @@
 #!/user/bin.env python
 # -*- coding: utf-8 -*-
 
-import praw
-import requests
 import time
 
-# Made by /u/Pixel871 with some clean-up in the code early on by /u/silentclowd.
-# it sort of works.
-# Don't worry about crashes, since this crashes a lot. That is what the .bat file is for.
+import praw
+import requests
 
-
-# I do not share the secret code. It is in secret.txt
-import tag_helper
+from tags import tag_helper
 
 
 def get_secret():

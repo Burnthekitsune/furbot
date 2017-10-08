@@ -5,7 +5,6 @@
 # Priority goes to gender, fetish, pairing, body, act, positions and then others.
 
 # File names
-folder = 'tags\\'
 genders = 'gender.txt'
 pairings = 'pairings.txt'
 body = 'body.txt'
@@ -17,42 +16,42 @@ tag_limit = 25
 
 # A bunch of methods that prepare lists
 def get_genders():
-    full_list = open(folder + genders, 'r').read()
+    full_list = open(genders, 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_pairings():
-    full_list = open(folder + pairings, 'r').read()
+    full_list = open(pairings, 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_body():
-    full_list = open(folder + body, 'r').read()
+    full_list = open(body, 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_acts():
-    full_list = open(folder + acts, 'r').read()
+    full_list = open(acts, 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_positions():
-    full_list = open(folder + positions, 'r').read()
+    full_list = open(positions, 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_fetishes():
-    full_list = open(folder + fetishes, 'r').read()
+    full_list = open(fetishes, 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
@@ -123,7 +122,7 @@ def find_others(tags):
     tag_list = list()
     i = 0
     while i < len(tags):
-        if tags[i] not in full_list:
+        if tags[i] not in full_tag_list:
             tag_list.append(tags[i])
         i += 1
     return tag_list
@@ -158,4 +157,4 @@ body_list = get_body()
 act_list = get_acts()
 position_list = get_positions()
 fetish_list = get_fetishes()
-full_list = gender_list + pairing_list + body_list + act_list + position_list + fetish_list
+full_tag_list = gender_list + pairing_list + body_list + act_list + position_list + fetish_list
