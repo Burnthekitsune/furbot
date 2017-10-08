@@ -11,6 +11,9 @@ import time
 
 
 # I do not share the secret code. It is in secret.txt
+import tag_helper
+
+
 def get_secret():
     try:
         with open('secret.txt', 'r') as file:
@@ -102,6 +105,7 @@ def get_link(check_url, mode):
         if mode == 'wolfthorn':
             return 'Oops, Wolfthorn cannot be found. He must be in the shower or something.'
     else:
+        flash = False
         clipped = contents[number:]
         tag_clipped = contents[tag_number:]
         source_clipped = contents[source_number:]
@@ -111,7 +115,11 @@ def get_link(check_url, mode):
         url = clipped[:number_two]
         post_tags = tag_clipped[:tag_number_two]
         basic_source = source_clipped[:source_number_two]
-        source = get_source(url, basic_source)
+        if basic_source == 'https://static1.e621.net/images/download-preview.png':
+            flash = True
+            source = 'flash'
+        else:
+            source = get_source(url, basic_source)
         if mode == 'e926':
             url = url.replace('e621', 'e926')
             source = source.replace('e621', 'e926')
@@ -141,20 +149,23 @@ def get_source(post_url, sample):
 
 
 # Does some cleanup to tag massive tag list and adds it to the URL and sends it back.
+# Calls tag_hyper.py to do the sorting
 def url_and_tags(url, source, post_tags):
     full_tag_list = post_tags.split()
-    extra_info = ''
-    if len(full_tag_list) > 20:
-        num_of_tags = len(full_tag_list) - 20
-        full_tag_list = full_tag_list[:20]
-        extra_info = '\n**^^^^And ^^^^' + str(num_of_tags) + ' ^^^^other ^^^^tags**'
-    tag_list = " ^^^^".join(full_tag_list)
+    if len(full_tag_list) > 25:
+        better_tag_list = tag_helper.start_searching(full_tag_list)
+        tag_list = " ^^^^".join(better_tag_list)
+        tag_list.replace(' ^^^^\n', '\n')
+    else:
+        tag_list = " ^^^^".join(full_tag_list)
     tag_list = tag_list.replace('_', '\\_')
     tag_list = tag_list.replace('\\xc3\\xa9', 'é')
     body = '\n\n **^^^^Post ^^^^Tags:** ^^^^'
     post_url = '[Post](' + str(url) + ') | '
-    source_url = '[Direct Link](' + str(source) + ')'
-    return post_url + source_url + body + tag_list + extra_info
+    source_url = 'Sorry, this is a flash animation. A dirrect link would download it.'
+    if source != 'flash':
+        source_url = '[Direct Link](' + str(source) + ')'
+    return post_url + source_url + body + tag_list
 
 
 # Checks if a user has blacklisted themselves.
@@ -362,7 +373,8 @@ try:
     sfw_link = basic_sfw_link + apply_blacklist(banned_tag_list)
     for comment in comments:
         text = comment.body
-        author = comment.author
+        author = str(comment.author)
+        author.replace('_', '\\_')
         comment_id = comment.id
         if has_commented:
             wait()
