@@ -6,7 +6,7 @@ import time
 import praw
 import requests
 
-from tags import tag_helper
+import tag_helper
 
 
 def get_secret():

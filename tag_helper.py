@@ -4,54 +4,47 @@
 
 # Priority goes to gender, fetish, pairing, body, act, positions and then others.
 
-# File names
-genders = 'gender.txt'
-pairings = 'pairings.txt'
-body = 'body.txt'
-acts = 'sex_acts.txt'
-positions = 'positions.txt'
-fetishes = 'fetishes.txt'
 tag_limit = 25
 
 
 # A bunch of methods that prepare lists
 def get_genders():
-    full_list = open(genders, 'r').read()
+    full_list = open('tag/gender.txt', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_pairings():
-    full_list = open(pairings, 'r').read()
+    full_list = open('tag/pairings.txt', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_body():
-    full_list = open(body, 'r').read()
+    full_list = open('tag/body.txt', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_acts():
-    full_list = open(acts, 'r').read()
+    full_list = open('tag/sex_acts.txt', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_positions():
-    full_list = open(positions, 'r').read()
+    full_list = open('tag/positions.txt', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
 
 
 def get_fetishes():
-    full_list = open(fetishes, 'r').read()
+    full_list = open('tag/fetishes.txt', 'r').read()
     split_list = full_list.split('|')
     finished_list = list(filter(None, split_list))
     return finished_list
