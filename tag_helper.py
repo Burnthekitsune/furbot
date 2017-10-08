@@ -139,9 +139,9 @@ def start_searching(tags):
         tag_count += 1
     extra_tags = len(fixed_tag_list) - tag_count
     if extra_tags == 1:
-        short_list.append('\n**^^^^And ^^^^' + str(extra_tags) + ' ^^^^other ^^^^tag**')
+        short_list.append('**^^^^And ^^^^' + str(extra_tags) + ' ^^^^other ^^^^tag**')
     if extra_tags > 1:
-        short_list.append('\n**^^^^And ^^^^' + str(extra_tags) + ' ^^^^other ^^^^tags**')
+        short_list.append('**^^^^And ^^^^' + str(extra_tags) + ' ^^^^other ^^^^tags**')
     return short_list
 
 gender_list = get_genders()

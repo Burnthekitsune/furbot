@@ -150,14 +150,16 @@ def url_and_tags(url, source, post_tags):
     if len(full_tag_list) > 25:
         better_tag_list = tag_helper.start_searching(full_tag_list)
         tag_list = " ^^^^".join(better_tag_list)
-        tag_list.replace(' ^^^^\n', '\n')
+        if '^^^^**' in tag_list:
+            print('yo')
+        tag_list = tag_list.replace('^^^^**', '\n**')
     else:
         tag_list = " ^^^^".join(full_tag_list)
     tag_list = tag_list.replace('_', '\\_')
     tag_list = tag_list.replace('\\xc3\\xa9', 'é')
     body = '\n\n **^^^^Post ^^^^Tags:** ^^^^'
     post_url = '[Post](' + str(url) + ') | '
-    source_url = 'Sorry, this is a flash animation. A dirrect link would download it.'
+    source_url = 'Sorry, this is a flash animation. A direct link would download it.'
     if source != 'flash':
         source_url = '[Direct Link](' + str(source) + ')'
     return post_url + source_url + body + tag_list
@@ -353,9 +355,9 @@ def check_owo(owo_comment):
             print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
         if owo_num == 621:
             owo_message = get_message(comment.author, 'owo', '', '')
-            owo_message.replace('them.\n\n', 'them.\n\n This is a special owo,'
-                                ' /u/Pixel871 will fill you in on the details of the minor prize.\n\n')
-            owo_message.replace('621th', '621st')
+            owo_message = owo_message.replace('them.\n\n', 'them.\n\n This is a special owo,'
+                                              ' /u/Pixel871 will fill you in on the details of the minor prize.\n\n')
+            owo_message = owo_message.replace('621th', '621st')
             owo_comment.reply(owo_message)
 
 
@@ -369,7 +371,7 @@ try:
     for comment in comments:
         text = comment.body
         author = str(comment.author)
-        author.replace('_', '\\_')
+        author = author.replace('_', '\\_')
         comment_id = comment.id
         if has_commented:
             wait()
@@ -395,8 +397,8 @@ try:
                         command_line = lines[i]
                         found_command = True
                     i += 1
-                command_line.replace('.', '')
-                command_line.replace(',', '')
+                command_line = command_line.replace('.', '')
+                command_line = command_line.replace(',', '')
                 cut_spot = command_line.lower().find(command) + 14
                 cut = command_line[cut_spot:]
                 tags = cut.split()
@@ -440,8 +442,8 @@ try:
                         command_line = lines[i]
                         found_command = True
                     i += 1
-                command_line.replace('.', '')
-                command_line.replace(',', '')
+                command_line = command_line.replace('.', '')
+                command_line = command_line.replace(',', '')
                 cut_spot = command_line.lower().find(command) + 18
                 cut = command_line[cut_spot:]
                 tags = cut.split()
@@ -486,8 +488,8 @@ try:
                         command_line = lines[i]
                         found_command = True
                     i += 1
-                command_line.replace('.', '')
-                command_line.replace(',', '')
+                command_line = command_line.replace('.', '')
+                command_line = command_line.replace(',', '')
                 cut_spot = command_line.lower().find(command) + 19
                 cut = command_line[cut_spot:]
                 tags = cut.split()
