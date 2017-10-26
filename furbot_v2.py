@@ -2,10 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import time
-
 import praw
 import requests
-
 import tag_helper
 
 
@@ -100,7 +98,6 @@ def get_link(check_url, mode):
         if mode == 'wolfthorn':
             return 'Oops, Wolfthorn cannot be found. He must be in the shower or something.'
     else:
-        flash = False
         clipped = contents[number:]
         tag_clipped = contents[tag_number:]
         source_clipped = contents[source_number:]
@@ -111,7 +108,6 @@ def get_link(check_url, mode):
         post_tags = tag_clipped[:tag_number_two]
         basic_source = source_clipped[:source_number_two]
         if basic_source == 'https://static1.e621.net/images/download-preview.png':
-            flash = True
             source = 'flash'
         else:
             source = get_source(url, basic_source)
@@ -150,8 +146,6 @@ def url_and_tags(url, source, post_tags):
     if len(full_tag_list) > 25:
         better_tag_list = tag_helper.start_searching(full_tag_list)
         tag_list = " ^^^^".join(better_tag_list)
-        if '^^^^**' in tag_list:
-            print('yo')
         tag_list = tag_list.replace('^^^^**', '\n**')
     else:
         tag_list = " ^^^^".join(full_tag_list)
@@ -194,14 +188,14 @@ def check_approved(user):
 # This is for fun custom stuff with custom_messages.txt
 def bonus_message(user):
     file = open('custom_messages.txt', 'r')
-    username = str(user)
+    username = str(user).lower()
     user_list = file.readlines()
     found_name = False
     response = ''
     j = 0
     while j < len(user_list) and not found_name:
         message_split = user_list[j].split('|')
-        if username == message_split[0]:
+        if username == message_split[0].lower():
             response = message_split[1] + '\n\n'
             found_name = True
         j += 1
@@ -265,8 +259,8 @@ def get_message(user_name, mode, search_tags, banned_tag):
         body = 'Congratulations, ' + str(author) + '! That was the **' + get_owo_count() + 'th** owo since I ' \
                 'started to track them.\n\n---\n\n'
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl.'
-              'To blacklist yourself, say "furbot stop". Comments from this bot that go below 0 will be deleted. \n\n'
-              'Check out my [profile](https://www.reddit.com/user/furbot_/) for commands'
+              'To blacklist yourself, say "furbot blacklist me". Comments from this bot that go below 0 will be deleted'
+              '. \n\nCheck out my [profile](https://www.reddit.com/user/furbot_/) for commands'
               ', bug reports, feature requests, and news')
     full_message = bonus + body + " ^^^".join(footer.split())
     return full_message
@@ -293,7 +287,7 @@ def check_tag(tag, banned_tags):
 
 # Prevents people from altering a search parameters.
 def check_cheese(tag):
-    if 'score' in tag or 'rating' in tag:
+    if 'score' in tag:
         return True
     else:
         return False
@@ -353,13 +347,27 @@ def check_owo(owo_comment):
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_comment.reply(owo_message)
             print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
-        if owo_num == 621:
+            add_owo_list(owo_num, str(owo_comment.author))
+        if owo_num == 621 or owo_num == 871 or owo_num == 926:
             owo_message = get_message(comment.author, 'owo', '', '')
             owo_message = owo_message.replace('them.\n\n', 'them.\n\n This is a special owo,'
                                               ' /u/Pixel871 will fill you in on the details of the minor prize.\n\n')
             owo_message = owo_message.replace('621th', '621st')
+            owo_message = owo_message.replace('871th', '871st')
             owo_comment.reply(owo_message)
+            add_owo_list(owo_num, str(owo_comment.author))
 
+
+# adds an owo number and username to the scoreboard
+def add_owo_list(owo_num, username):
+    username = '/u/' + username.replace('\\_', '_')
+    if owo_num % 10 == 1:
+        owo_value = str(owo_num) + 'st'
+    else:
+        owo_value = str(owo_num) + 'th'
+    add = open('owo_leaderboard', 'a')
+    add.write('* ' + owo_value + ' - ' + username)
+    add.close()
 
 # The bot itself.
 # Due to how I have changed it, it doesn't need the try, but as soon as I remove it, it crashes.
@@ -376,7 +384,7 @@ try:
         if has_commented:
             wait()
             has_commented = False
-        if 'furbot stop' in text.lower():
+        if 'furbot blacklist me' in text.lower():
             if check_user(author):
                 remove_user(author)
                 print(str(author) + ' has been blacklisted')
@@ -391,6 +399,7 @@ try:
                 lines = full.split('\n')
                 i = 0
                 found_command = False
+                command_line = ''
                 while i < len(lines) and not found_command:
                     current_line = lines[i].lower().find(command)
                     if current_line != -1:
@@ -436,6 +445,7 @@ try:
                 lines = full.split('\n')
                 i = 0
                 found_command = False
+                command_line = ''
                 while i < len(lines) and not found_command:
                     current_line = lines[i].lower().find(command)
                     if current_line != -1:
@@ -482,6 +492,7 @@ try:
                 lines = full.split('\n')
                 i = 0
                 found_command = False
+                command_line = ''
                 while i < len(lines) and not found_command:
                     current_line = lines[i].lower().find(command)
                     if current_line != -1:
