@@ -261,7 +261,8 @@ def get_message(user_name, mode, search_tags, banned_tag):
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl.'
               'To blacklist yourself, say "furbot blacklist me". Comments from this bot that go below 0 will be deleted'
               '. \n\nCheck out my [profile](https://www.reddit.com/user/furbot_/) for commands'
-              ', bug reports, feature requests, and news')
+              ', bug reports, feature requests, and news.'
+              ' I am made by Pixel871, contact him if something happens to me.')
     full_message = bonus + body + " ^^^".join(footer.split())
     return full_message
 
@@ -365,7 +366,7 @@ def add_owo_list(owo_num, username):
         owo_value = str(owo_num) + 'st'
     else:
         owo_value = str(owo_num) + 'th'
-    add = open('owo_leaderboard', 'a')
+    add = open('owo_leaderboard.txt', 'a')
     add.write('* ' + owo_value + ' - ' + username)
     add.close()
 
