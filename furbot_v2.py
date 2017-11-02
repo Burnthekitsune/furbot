@@ -239,7 +239,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
     if mode == 'denied':
         body = ('Oops! Mod Daddy will beat me if I search something like that! Sorry!' + '\n\n'
                 '---\n\n')
-    if mode == 'denied':
+    if mode == 'cheese':
         body = ('Sorry, I am too smart to fall for that one' + '\n\n'
                 '---\n\n')
     if mode == 'blacklist':
@@ -248,7 +248,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
         body = 'Successfully banned ' + search_tags + '\n\n---\n\n'
     if mode == 'ban fail':
         body = 'Failed to add to ban list, all tags are on list.\n\n---\n\n'
-    if mode == 'not approved' or mode == 'cheese':
+    if mode == 'not approved':
         body = 'I\'m sorry ' + str(author) + ', I\'m afraid I can\'t do that. \n\n---\n\n'
     if mode == 'wolfthorn':
         body = ('OwO Did I hear you mention Wolfthorn? \n\n&nbsp;\n\n Here is a picture of him '
