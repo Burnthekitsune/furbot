@@ -222,7 +222,7 @@ def hidden_command(comment_body):
     response = ''
     while j < len(file_lines) and not found_hidden_command:
         message_split = file_lines[j].split('|')
-        if message_split[0] in comment_body.lower():
+        if message_split[0] in comment_body:
             found_hidden_command = True
             comment_mode = message_split[1]
             if comment_mode == 'search':
