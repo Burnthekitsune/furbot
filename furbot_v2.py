@@ -43,7 +43,6 @@ comment_count = 0
 has_commented = False
 basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25'
 basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+-mlp+score%3A%3E25'
-wolf_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25+wolfthorn_(old_spice)'
 
 
 # Prevents the bot from getting spammy.
@@ -95,8 +94,8 @@ def get_link(check_url, mode):
                     ' mode.')
         if mode == 'e621' or mode == 'e926':
             return 'An error has occurred, ' + mode + ' may be down'
-        if mode == 'wolfthorn':
-            return 'Oops, Wolfthorn cannot be found. He must be in the shower or something.'
+        else:
+            return 'Oops, some part of the hidden command broke.'
     else:
         clipped = contents[number:]
         tag_clipped = contents[tag_number:]
@@ -199,6 +198,7 @@ def bonus_message(user):
             response = message_split[1] + '\n\n'
             found_name = True
         j += 1
+    file.close()
     return response
 
 
@@ -210,8 +210,44 @@ def remove_user(user):
     user_list.close()
 
 
+# For hidden commands
+# Added to allow easier expansion
+def hidden_command(comment_body):
+    file = open('bonus_commands.txt', 'r')
+    file_lines = file.readlines()
+    j = 0
+    found_hidden_command = False
+    comment_mode = ''
+    comment_tag = ''
+    response = ''
+    while j < len(file_lines) and not found_hidden_command:
+        message_split = file_lines[j].split('|')
+        if message_split[0] in comment_body.lower():
+            found_hidden_command = True
+            comment_mode = message_split[1]
+            if comment_mode == 'search':
+                comment_tag = message_split[2]
+                response = message_split[3]
+            else:
+                response = message_split[2]
+    if found_hidden_command:
+        full_info = hidden_command_comment(comment_mode, response, comment_tag)
+        return full_info
+    else:
+        return ''
+
+
+# sets up comments for hidden commands
+def hidden_command_comment(comment_mode, response, comment_tag):
+    if comment_mode == 'search':
+        comment_response = response + get_message('', 'hidden_search', comment_tag)
+    else:
+        comment_response = response + get_message('', 'hidden_response', '')
+    return comment_response
+
+
 # This makes the reply that the bot gives, this is the real meat of the bot.
-def get_message(user_name, mode, search_tags, banned_tag):
+def get_message(user_name, mode, search_tags):
     body = 'Something has gone horribly wrong with the code!\n\n---\n\n'
     bonus = bonus_message(user_name)
     if bonus == '':
@@ -234,7 +270,7 @@ def get_message(user_name, mode, search_tags, banned_tag):
     if mode == 'search' or mode == 'sfw search' or mode == 'mild search':
         tag_list = ' '.join(search_tags)
         body = ('Hi, ' + str(user_name) + '. Here is the results for your search for these search tags:'
-                ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags, banned_tag, mode), mode) + '\n\n'
+                ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags, banned_tag_list, mode), mode) + '\n\n'
                 '---\n\n')
     if mode == 'denied':
         body = ('Oops! Mod Daddy will beat me if I search something like that! Sorry!' + '\n\n'
@@ -250,11 +286,11 @@ def get_message(user_name, mode, search_tags, banned_tag):
         body = 'Failed to add to ban list, all tags are on list.\n\n---\n\n'
     if mode == 'not approved':
         body = 'I\'m sorry ' + str(author) + ', I\'m afraid I can\'t do that. \n\n---\n\n'
-    if mode == 'wolfthorn':
-        body = ('OwO Did I hear you mention Wolfthorn? \n\n&nbsp;\n\n Here is a picture of him '
-                'compliments of e621. (obviously nsfw) \n\n' + get_link(wolf_link, mode) + '\n\n'
-                '---\n\n'
-                )
+    if mode == 'hidden_search':
+        body = ('\n\n' + get_link(basic_link, mode) + '\n\n'
+                '---\n\n')
+    if mode == 'hidden_response':
+        body = '\n\n---\n\n'
     if mode == 'owo':
         body = 'Congratulations, ' + str(author) + '! That was the **' + get_owo_count() + 'th** owo since I ' \
                 'started to track them.\n\n---\n\n'
@@ -345,12 +381,12 @@ def check_owo(owo_comment):
         owo_counter()
         owo_num = int(get_owo_count())
         if owo_num % 100 == 0:
-            owo_message = get_message(comment.author, 'owo', '', '')
+            owo_message = get_message(comment.author, 'owo', '')
             owo_comment.reply(owo_message)
             print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
             add_owo_list(owo_num, str(owo_comment.author))
         if owo_num == 621 or owo_num == 871 or owo_num == 926:
-            owo_message = get_message(comment.author, 'owo', '', '')
+            owo_message = get_message(comment.author, 'owo', '')
             owo_message = owo_message.replace('them.\n\n', 'them.\n\n This is a special owo,'
                                               ' /u/Pixel871 will fill you in on the details of the minor prize.\n\n')
             owo_message = owo_message.replace('621th', '621st')
@@ -389,9 +425,9 @@ try:
             if check_user(author):
                 remove_user(author)
                 print(str(author) + ' has been blacklisted')
-                message = get_message(author, 'blacklist', '', banned_tag_list)
+                message = get_message(author, 'blacklist', '')
                 comment.reply(message)
-        if 'furbot search' in text.lower():
+        if 'furbot search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 full = str(comment.body)
@@ -420,24 +456,24 @@ try:
                     cheese = check_cheese(tags[i])
                     i += 1
                 if pure and not cheese:
-                    message = get_message(author, 'search', tags, banned_tag_list)
+                    message = get_message(author, 'search', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
                 if not pure:
-                    message = get_message(author, 'denied', tags, banned_tag_list)
+                    message = get_message(author, 'denied', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
                 if cheese:
-                    message = get_message(author, 'cheese', tags, banned_tag_list)
+                    message = get_message(author, 'cheese', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-        if 'furbot sfw search' in text.lower():
+        if 'furbot sfw search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 full = str(comment.body)
@@ -466,25 +502,25 @@ try:
                     cheese = check_cheese(tags[i])
                     i += 1
                 if pure and not cheese:
-                    message = get_message(author, 'sfw search', tags, banned_tag_list)
+                    message = get_message(author, 'sfw search', tags)
                     message = message.replace('e621.net', 'e926.net')
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
                 if not pure:
-                    message = get_message(author, 'denied', tags, banned_tag_list)
+                    message = get_message(author, 'denied', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
                 if cheese:
-                    message = get_message(author, 'cheese', tags, banned_tag_list)
+                    message = get_message(author, 'cheese', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-        if 'furbot mild search' in text.lower():
+        if 'furbot mild search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 full = str(comment.body)
@@ -513,19 +549,19 @@ try:
                     cheese = check_cheese(tags[i])
                     i += 1
                 if pure and not cheese:
-                    message = get_message(author, 'mild search', tags, banned_tag_list)
+                    message = get_message(author, 'mild search', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
                 if not pure:
-                    message = get_message(author, 'denied', tags, banned_tag_list)
+                    message = get_message(author, 'denied', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
                 if cheese:
-                    message = get_message(author, 'cheese', tags, banned_tag_list)
+                    message = get_message(author, 'cheese', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
@@ -536,7 +572,7 @@ try:
                 has_commented = True
                 comment_count += 1
                 print(comment_count)
-                message = get_message(author, 'e621', '', banned_tag_list)
+                message = get_message(author, 'e621', '')
                 comment.reply(message)
                 add_id(comment_id)
         if 'e926' in text.lower() and 'http' not in text.lower():
@@ -545,16 +581,7 @@ try:
                 has_commented = True
                 comment_count += 1
                 print(comment_count)
-                message = get_message(author, 'e926', '', banned_tag_list)
-                comment.reply(message)
-                add_id(comment_id)
-        if 'wolfthorn' in text.lower() and 'http' not in text.lower():
-            if check_id(comment_id) and check_user(author):
-                check_owo(comment)
-                has_commented = True
-                comment_count += 1
-                print(comment_count)
-                message = get_message(author, 'wolfthorn', '', banned_tag_list)
+                message = get_message(author, 'e926', '')
                 comment.reply(message)
                 add_id(comment_id)
         if str(author) == 'furbot_' and comment.score < 0:
@@ -583,24 +610,33 @@ try:
                     i += 1
                 banned_tag_list = get_blacklist()
                 if newly_banned_tags != '':
-                    message = get_message(author, 'ban', newly_banned_tags, '')
+                    message = get_message(author, 'ban', newly_banned_tags)
                     print('banned ' + newly_banned_tags)
                     comment.reply(message)
                 else:
-                    message = get_message(author, 'ban fail', newly_banned_tags, '')
+                    message = get_message(author, 'ban fail', newly_banned_tags)
                 add_id(comment_id)
                 comment.reply(message)
             else:
-                message = get_message(author, 'not approved', '', '')
+                message = get_message(author, 'not approved', '')
                 add_id(comment_id)
                 comment.reply(message)
                 comment_count += 1
                 print(comment_count)
                 has_commented = True
-        if check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
-            if check_user(author):
-                check_owo(comment)
-                add_id(comment_id)
+        else:
+            if check_id(comment_id) and check_user(author):
+                check_hidden_command = hidden_command(text.lower)
+                if check_hidden_command != '':
+                    add_id(comment_id)
+                    check_owo(comment)
+                    comment.reply(check_hidden_command)
+                if check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
+                    if check_user(author):
+                        check_owo(comment)
+                        add_id(comment_id)
+
+
 except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
