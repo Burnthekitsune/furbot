@@ -41,8 +41,8 @@ subreddit = bot.subreddit('furry_irl')
 comments = subreddit.stream.comments()
 comment_count = 0
 has_commented = False
-basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+-mlp+score%3A%3E25'
-basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+-mlp+score%3A%3E25'
+basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+score%3A%3E25'
+basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+score%3A%3E25'
 
 
 # Prevents the bot from getting spammy.
