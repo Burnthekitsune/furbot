@@ -230,6 +230,7 @@ def hidden_command(comment_body):
                 response = message_split[3]
             else:
                 response = message_split[2]
+        j += 1
     if found_hidden_command:
         full_info = hidden_command_comment(comment_mode, response, comment_tag)
         return full_info
@@ -626,17 +627,16 @@ try:
                 has_commented = True
         else:
             if check_id(comment_id) and check_user(author):
-                check_hidden_command = hidden_command(text.lower)
+                check_hidden_command = hidden_command(text.lower())
                 if check_hidden_command != '':
                     add_id(comment_id)
                     check_owo(comment)
                     comment.reply(check_hidden_command)
+                    has_commented = True
                 if check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
                     if check_user(author):
                         check_owo(comment)
                         add_id(comment_id)
-
-
 except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
