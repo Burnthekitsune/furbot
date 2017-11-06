@@ -222,7 +222,7 @@ def hidden_command(comment_body):
     response = ''
     while j < len(file_lines) and not found_hidden_command:
         message_split = file_lines[j].split('|')
-        if message_split[0] in comment_body:
+        if ' ' + message_split[0] + ' ' in comment_body:
             found_hidden_command = True
             comment_mode = message_split[1]
             if comment_mode == 'search':
@@ -295,7 +295,7 @@ def get_message(user_name, mode, search_tags):
     if mode == 'owo':
         body = 'Congratulations, ' + str(author) + '! That was the **' + get_owo_count() + 'th** owo since I ' \
                 'started to track them.\n\n---\n\n'
-    footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl.'
+    footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl. '
               'To blacklist yourself, say "furbot blacklist me". Comments from this bot that go below 0 will be deleted'
               '. \n\nCheck out my [profile](https://www.reddit.com/user/furbot_/) for commands'
               ', bug reports, feature requests, and news.'
