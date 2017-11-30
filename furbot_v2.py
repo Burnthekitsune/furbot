@@ -6,6 +6,12 @@ import praw
 import requests
 import tag_helper
 
+# gotta have a user agent for the request
+header = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, '
+                  'ike Gecko) Chrome/62.0.3202.94 Safari/537.36'
+}
+
 
 def get_secret():
     try:
@@ -73,7 +79,7 @@ def check_id(given_id):
 
 # Gets a link for the bot to reply with.
 def get_link(check_url, mode):
-    r = requests.get(check_url)
+    r = requests.get(check_url, headers=header)
     contents = str(r.content)
     sample = 'http://e621.net/post/show/'
     tag_sample = '<entry>'
@@ -121,7 +127,7 @@ def get_link(check_url, mode):
 
 # Helper method to find the direct url of the post
 def get_source(post_url, sample):
-    r = requests.get(post_url)
+    r = requests.get(post_url, headers=header)
     contents = str(r.content)
     basic_sample = '/preview/'
     post_id_cut_spot = sample.find(basic_sample) + 9
