@@ -305,7 +305,7 @@ def get_message(user_name, mode, search_tags):
         body = 'Congratulations, ' + str(author) + '! That was the **' + get_owo_count() + 'th** owo since I ' \
                 'started to track them.\n\n---\n\n'
     if mode == 'furbot':
-        body = '\>///< Okay, I guess if you want to see me. \n' + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
+        body = '\>///< Okay, I guess if you want to see me. \n\n' + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl. '
               'To blacklist yourself, say "furbot blacklist me". Comments from this bot that go below 0 will be deleted'
               '. \n\nCheck out my [profile](https://www.reddit.com/user/furbot_/) for commands'
