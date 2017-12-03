@@ -49,6 +49,7 @@ comment_count = 0
 has_commented = False
 basic_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3Ae+score%3A%3E25'
 basic_sfw_link = 'https://e621.net/post/atom?tags=order%3Arandom+rating%3As+score%3A%3E25'
+basic_furbot_link = 'https://e621.net/post/atom?tags=order%3Arandom+furbot'
 
 
 # Prevents the bot from getting spammy.
@@ -98,6 +99,8 @@ def get_link(check_url, mode):
             return ('no results found, you may have an invalid tag, or all posts for your tags have a score below 25'
                     '\n It is also possible no posts have an questionable rating, this bot search for that with this'
                     ' mode.')
+        if mode == 'furbot':
+            return 'Sorry, I think something went wrong with e621.'
         if mode == 'e621' or mode == 'e926':
             return 'An error has occurred, ' + mode + ' may be down'
         else:
@@ -301,6 +304,8 @@ def get_message(user_name, mode, search_tags):
     if mode == 'owo':
         body = 'Congratulations, ' + str(author) + '! That was the **' + get_owo_count() + 'th** owo since I ' \
                 'started to track them.\n\n---\n\n'
+    if mode == 'furbot':
+        body = '>///< Okay, I guess if you want to see me. \m' + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl. '
               'To blacklist yourself, say "furbot blacklist me". Comments from this bot that go below 0 will be deleted'
               '. \n\nCheck out my [profile](https://www.reddit.com/user/furbot_/) for commands'
@@ -434,6 +439,15 @@ try:
                 print(str(author) + ' has been blacklisted')
                 message = get_message(author, 'blacklist', '')
                 comment.reply(message)
+        if 'furbot search furbot' in text.lower():
+            if check_id(comment_id) and check_user(author):
+                check_owo(comment)
+                has_commented = True
+                comment_count += 1
+                print(comment_count)
+                message = get_message(author, 'furbot', '')
+                comment.reply(message)
+                add_id(comment_id)
         if 'furbot search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
