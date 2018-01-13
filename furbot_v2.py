@@ -292,7 +292,7 @@ def get_message(user_name, mode, search_tags):
     if mode == 'blacklist':
         body = 'You have been blacklisted. Message Pixel871 if you want messages from the bot again \n\n---\n\n'
     if mode == 'ban':
-        body = 'Successfully banned ' + search_tags + '\n\n---\n\n'
+        body = 'Successfully banned ' + search_tags + 'git reset --hard'
     if mode == 'ban fail':
         body = 'Failed to add to ban list, all tags are on list.\n\n---\n\n'
     if mode == 'not approved':
@@ -308,9 +308,10 @@ def get_message(user_name, mode, search_tags):
     if mode == 'furbot':
         body = '\>///< Okay, I guess if you want to see me. \n\n' + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
     if mode == 'good bot':
-        body = 'Thank you,' + author + '! I am glad I could be helpful. ^\\^'
+        body = 'Thank you,' + author + '! I am glad I could be helpful. ^\\^\n\n---\n\n'
     if mode == 'bad bot':
-        body = 'I am sorry to disappoint you ' + author + ', but it isn\' my fault. I just do what I am told.'
+        body = 'I am sorry to disappoint you ' + author + ', but it isn\' my fault. I just do what I am told.' \
+               '\n\n---\n\n'
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl. '
               'To blacklist yourself, say "furbot blacklist me". Comments from this bot that go below 0 will be deleted'
               '. \n\nCheck out my [profile](https://www.reddit.com/user/furbot_/) for commands'
