@@ -308,7 +308,7 @@ def get_message(user_name, mode, search_tags):
     if mode == 'furbot':
         body = '\>///< Okay, I guess if you want to see me. \n\n' + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
     if mode == 'good bot':
-        body = 'Thank you,' + author + '! I am glad I could be helpful. ^\\^\n\n---\n\n'
+        body = 'Thank you,' + author + '! I am glad I could be helpful. \\^^\n\n---\n\n'
     if mode == 'bad bot':
         body = 'I am sorry to disappoint you ' + author + ', but it isn\' my fault. I just do what I am told.' \
                '\n\n---\n\n'
