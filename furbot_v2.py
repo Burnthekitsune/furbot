@@ -11,6 +11,7 @@ header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, '
                   'ike Gecko) Chrome/62.0.3202.94 Safari/537.36'
 }
+bot_name = 'furbot_'
 
 
 def get_secret():
@@ -36,7 +37,7 @@ def get_password():
 bot = praw.Reddit(user_agent='Fur Bot v2',
                   client_id='w0VJv_O15uALXw',
                   client_secret=get_secret(),
-                  username='furbot_',
+                  username=bot_name,
                   password=get_password())
 
 
@@ -306,6 +307,10 @@ def get_message(user_name, mode, search_tags):
                 'started to track them.\n\n---\n\n'
     if mode == 'furbot':
         body = '\>///< Okay, I guess if you want to see me. \n\n' + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
+    if mode == 'good bot':
+        body = 'Thank you,' + author + '! I am glad I could be helpful. ^\\^'
+    if mode == 'bad bot':
+        body = 'I am sorry to disappoint you ' + author + ', but it isn\' my fault. I just do what I am told.'
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl. '
               'To blacklist yourself, say "furbot blacklist me". Comments from this bot that go below 0 will be deleted'
               '. \n\nCheck out my [profile](https://www.reddit.com/user/furbot_/) for commands'
@@ -417,6 +422,7 @@ def add_owo_list(owo_num, username):
     add = open('owo_leaderboard.txt', 'a')
     add.write('* ' + owo_value + ' - ' + username)
     add.close()
+
 
 # The bot itself.
 # Due to how I have changed it, it doesn't need the try, but as soon as I remove it, it crashes.
@@ -605,6 +611,26 @@ try:
                 message = get_message(author, 'e926', '')
                 comment.reply(message)
                 add_id(comment_id)
+        if 'good bot' in text.lower():
+            if check_id(comment_id) and check_user(author):
+                check_owo(comment)
+                parent = comment.parent()
+                if str(parent.author) == bot_name:
+                    has_commented = True
+                    print("Good bot")
+                    message = get_message(author, 'good bot', '')
+                    comment.reply(message)
+                    add_id(comment_id)
+        if 'bad bot' in text.lower():
+            if check_id(comment_id) and check_user(author):
+                check_owo(comment)
+                parent = comment.parent()
+                if str(parent.author) == bot_name:
+                    has_commented = True
+                    print("Bad bot")
+                    message = get_message(author, 'bad bot', '')
+                    comment.reply(message)
+                    add_id(comment_id)
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
