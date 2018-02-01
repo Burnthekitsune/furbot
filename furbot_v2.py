@@ -1,10 +1,10 @@
-#!/user/bin.env python
 # -*- coding: utf-8 -*-
 
 import time
 import praw
 import requests
 import tag_helper
+import re
 
 # gotta have a user agent for the request
 header = {
@@ -114,7 +114,7 @@ def get_link(check_url, mode):
         tag_number_two = tag_clipped.find('<')
         source_number_two = source_clipped.find('\"')
         url = clipped[:number_two]
-        post_tags = tag_clipped[:tag_number_two]
+        post_tags = tag_clipped[:tag_number_two - 1]
         basic_source = source_clipped[:source_number_two]
         if basic_source == 'https://static1.e621.net/images/download-preview.png':
             source = 'flash'
@@ -437,6 +437,7 @@ try:
         author = str(comment.author)
         author = author.replace('_', '\\_')
         comment_id = comment.id
+        comment_id = re.sub(r'\W+', '', check_id())
         if has_commented:
             wait()
             has_commented = False
@@ -450,11 +451,11 @@ try:
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 has_commented = True
+                add_id(comment_id)
                 comment_count += 1
                 print(comment_count)
                 message = get_message(author, 'furbot', '')
                 comment.reply(message)
-                add_id(comment_id)
         if 'furbot search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
@@ -598,20 +599,20 @@ try:
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 has_commented = True
+                add_id(comment_id)
                 comment_count += 1
                 print(comment_count)
                 message = get_message(author, 'e621', '')
                 comment.reply(message)
-                add_id(comment_id)
         if 'e926' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 has_commented = True
+                add_id(comment_id)
                 comment_count += 1
                 print(comment_count)
                 message = get_message(author, 'e926', '')
                 comment.reply(message)
-                add_id(comment_id)
         if 'good bot' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
@@ -619,9 +620,9 @@ try:
                 if str(parent.author) == bot_name:
                     has_commented = True
                     print("Good bot")
+                    add_id(comment_id)
                     message = get_message(author, 'good bot', '')
                     comment.reply(message)
-                    add_id(comment_id)
         if 'bad bot' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
@@ -629,9 +630,9 @@ try:
                 if str(parent.author) == bot_name:
                     has_commented = True
                     print("Bad bot")
+                    add_id(comment_id)
                     message = get_message(author, 'bad bot', '')
                     comment.reply(message)
-                    add_id(comment_id)
         if str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
