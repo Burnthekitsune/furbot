@@ -437,7 +437,7 @@ try:
         author = str(comment.author)
         author = author.replace('_', '\\_')
         comment_id = comment.id
-        comment_id = re.sub(r'\W+', '', check_id())
+        comment_id = re.sub('[^0-9a-zA-Z]+', '*', comment_id)
         if has_commented:
             wait()
             has_commented = False
