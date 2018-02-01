@@ -682,8 +682,8 @@ try:
                     has_commented = True
                 if check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
                     if check_user(author):
-                        check_owo(comment)
                         add_id(comment_id)
+                        check_owo(comment)
 except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
