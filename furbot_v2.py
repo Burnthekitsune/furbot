@@ -44,7 +44,7 @@ bot = praw.Reddit(user_agent='Fur Bot v2',
 # A nice notice that the bot is running
 print(str(bot.user.me()) + ' is now running...')
 # Some default stuff
-subreddit = bot.subreddit('furry_irl')
+subreddit = bot.subreddit('furry_irl+furrystarterpacks')
 comments = subreddit.stream.comments()
 comment_count = 0
 has_commented = False
@@ -56,7 +56,7 @@ basic_furbot_link = 'https://e621.net/post/atom?tags=order%3Arandom+furbot'
 # Prevents the bot from getting spammy.
 # Has saved me when the bot replied to itself for a new function.
 def wait():
-    time.sleep(60)
+    time.sleep(5)
 
 
 # Gets the tag blacklist from the tag_file.
