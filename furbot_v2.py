@@ -403,14 +403,6 @@ def check_owo(owo_comment):
             owo_comment.reply(owo_message)
             print(str(owo_comment.author) + ' has said the ' + str(owo_num) + 'th owo!')
             add_owo_list(owo_num, str(owo_comment.author))
-        if owo_num == 621 or owo_num == 871 or owo_num == 926:
-            owo_message = get_message(comment.author, 'owo', '')
-            owo_message = owo_message.replace('them.\n\n', 'them.\n\n This is a special owo,'
-                                              ' /u/Pixel871 will fill you in on the details of the minor prize.\n\n')
-            owo_message = owo_message.replace('621th', '621st')
-            owo_message = owo_message.replace('871th', '871st')
-            owo_comment.reply(owo_message)
-            add_owo_list(owo_num, str(owo_comment.author))
 
 
 # adds an owo number and username to the scoreboard
@@ -441,13 +433,13 @@ try:
         if has_commented:
             wait()
             has_commented = False
-        if 'furbot blacklist me' in text.lower():
+        elif 'furbot blacklist me' in text.lower():
             if check_user(author):
                 remove_user(author)
                 print(str(author) + ' has been blacklisted')
                 message = get_message(author, 'blacklist', '')
                 comment.reply(message)
-        if 'furbot search furbot' in text.lower():
+        elif 'furbot search furbot' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 has_commented = True
@@ -456,7 +448,7 @@ try:
                 print(comment_count)
                 message = get_message(author, 'furbot', '')
                 comment.reply(message)
-        if 'furbot search ' in text.lower():
+        elif 'furbot search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 full = str(comment.body)
@@ -490,19 +482,19 @@ try:
                     comment_count += 1
                     print(comment_count)
                     wait()
-                if not pure:
+                elif not pure:
                     message = get_message(author, 'denied', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-                if cheese:
+                elif cheese:
                     message = get_message(author, 'cheese', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-        if 'furbot sfw search ' in text.lower():
+        elif 'furbot sfw search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 full = str(comment.body)
@@ -537,19 +529,19 @@ try:
                     comment_count += 1
                     print(comment_count)
                     wait()
-                if not pure:
+                elif not pure:
                     message = get_message(author, 'denied', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-                if cheese:
+                elif cheese:
                     message = get_message(author, 'cheese', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-        if 'furbot mild search ' in text.lower():
+        elif 'furbot mild search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 full = str(comment.body)
@@ -583,19 +575,19 @@ try:
                     comment_count += 1
                     print(comment_count)
                     wait()
-                if not pure:
+                elif not pure:
                     message = get_message(author, 'denied', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-                if cheese:
+                elif cheese:
                     message = get_message(author, 'cheese', tags)
                     comment.reply(message)
                     comment_count += 1
                     print(comment_count)
                     wait()
-        if 'e621' in text.lower() and 'http' not in text.lower():
+        elif 'e621' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 has_commented = True
@@ -604,7 +596,7 @@ try:
                 print(comment_count)
                 message = get_message(author, 'e621', '')
                 comment.reply(message)
-        if 'e926' in text.lower() and 'http' not in text.lower():
+        elif 'e926' in text.lower() and 'http' not in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 has_commented = True
@@ -613,7 +605,7 @@ try:
                 print(comment_count)
                 message = get_message(author, 'e926', '')
                 comment.reply(message)
-        if 'good bot' in text.lower():
+        elif 'good bot' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 parent = comment.parent()
@@ -623,7 +615,7 @@ try:
                     add_id(comment_id)
                     message = get_message(author, 'good bot', '')
                     comment.reply(message)
-        if 'bad bot' in text.lower():
+        elif 'bad bot' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
                 parent = comment.parent()
@@ -633,10 +625,10 @@ try:
                     add_id(comment_id)
                     message = get_message(author, 'bad bot', '')
                     comment.reply(message)
-        if str(author) == 'furbot_' and comment.score < 0:
+        elif str(author) == 'furbot_' and comment.score < 0:
             print('comment delete')
             comment.delete()
-        if 'furbot ban' in text.lower() and check_id(comment_id):
+        elif 'furbot ban' in text.lower() and check_id(comment_id):
             if check_approved(author):
                 command = 'furbot ban'
                 cut_spot = full.lower().find(command) + 14
@@ -673,18 +665,17 @@ try:
                 comment_count += 1
                 print(comment_count)
                 has_commented = True
-        else:
-            if check_id(comment_id) and check_user(author):
-                check_hidden_command = hidden_command(text.lower())
-                if check_hidden_command != '':
+        elif check_id(comment_id) and check_user(author):
+            check_hidden_command = hidden_command(text.lower())
+            if check_hidden_command != '':
+                add_id(comment_id)
+                check_owo(comment)
+                comment.reply(check_hidden_command)
+                has_commented = True
+        elif check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
+                if check_user(author):
                     add_id(comment_id)
                     check_owo(comment)
-                    comment.reply(check_hidden_command)
-                    has_commented = True
-                if check_id(comment_id) and ('owo' in text.lower() or '0w0' in text.lower()):
-                    if check_user(author):
-                        add_id(comment_id)
-                        check_owo(comment)
 except requests.exceptions.HTTPError as e:
     print('waiting...')
     wait()
