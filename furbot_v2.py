@@ -433,7 +433,7 @@ try:
         if has_commented:
             wait()
             has_commented = False
-        elif 'furbot blacklist me' in text.lower():
+        if 'furbot blacklist me' in text.lower():
             if check_user(author):
                 remove_user(author)
                 print(str(author) + ' has been blacklisted')
