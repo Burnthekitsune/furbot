@@ -6,6 +6,7 @@
 
 tag_limit = 25
 
+
 # Get the list from a text file.
 def get_list(list_url):
     if isinstance(list_url, str):
@@ -13,6 +14,7 @@ def get_list(list_url):
         split_list = full_list.split('|')
         finished_list = list(filter(None, split_list))
         return finished_list
+
 
 # Sort tags into categories, based on provided categories.
 def find_tags(tags, search_list):
@@ -24,6 +26,7 @@ def find_tags(tags, search_list):
         i += 1
     return tag_list
 
+
 def find_other_tags(tags, search_list):
     tag_list = list()
     i = 0
@@ -31,8 +34,9 @@ def find_other_tags(tags, search_list):
         if tags[i] not in search_list:
             tag_list.append(tags[i])
         i += 1
-    
+
     return tag_list
+
 
 # Starts the search
 # Called by Furbot
@@ -46,17 +50,17 @@ def start_searching(tags):
     position_tags = find_tags(tags, get_list('tag/positions.txt'))
     # If it was not caught before, it's not in a previous list.
     other_tags = find_other_tags(tags, gender_tags + fetish_tags + pairing_tags + body_tags + act_tags + position_tags)
-    
+
     fixed_tag_list = gender_tags + fetish_tags + pairing_tags + body_tags + act_tags + position_tags + other_tags
 
-    # Create the short list by slicing 
+    # Create the short list by slicing
     short_list = fixed_tag_list[:tag_limit]
+    tag_count = len(short_list)
 
-    #extra_tags = len(fixed_tag_list) - tag_count
+    extra_tags = len(fixed_tag_list) - tag_count
     if len(fixed_tag_list) == tag_limit + 1:
         short_list.append('**^^^^And ^^^^' + str(extra_tags) + ' ^^^^other ^^^^tag**')
     elif len(fixed_tag_list) > tag_limit + 1:
         short_list.append('**^^^^And ^^^^' + str(extra_tags) + ' ^^^^other ^^^^tags**')
     return short_list
-
 
