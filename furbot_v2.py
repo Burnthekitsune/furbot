@@ -417,6 +417,17 @@ def add_owo_list(owo_num, username):
     add.close()
 
 
+def april_fools(april_tags):
+    j = 0
+    while j < len(tags):
+        if tags[j] == 'male':
+            tags[j] = 'female'
+        elif tags[j] == 'female':
+            tags[j] = 'male'
+        j += 1
+    return april_tags
+
+
 # The bot itself.
 # Due to how I have changed it, it doesn't need the try, but as soon as I remove it, it crashes.
 # So it stays, as it doesn't alter anything.
@@ -471,6 +482,7 @@ try:
                 tags = cut.split()
                 pure = True
                 cheese = False
+                tags = april_fools(tags)
                 i = 0
                 while i < len(tags) and pure:
                     pure = check_tag(tags[i], banned_tag_list)
@@ -517,6 +529,7 @@ try:
                 tags = cut.split()
                 pure = True
                 cheese = False
+                tags = april_fools(tags)
                 i = 0
                 while i < len(tags) and pure and not cheese:
                     pure = check_tag(tags[i], banned_tag_list)
@@ -564,6 +577,7 @@ try:
                 tags = cut.split()
                 pure = True
                 cheese = False
+                tags = april_fools(tags)
                 i = 0
                 while i < len(tags) and pure and not cheese:
                     pure = check_tag(tags[i], banned_tag_list)
