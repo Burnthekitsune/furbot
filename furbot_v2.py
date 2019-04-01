@@ -373,7 +373,7 @@ def add_owo_list(owo_num, username):
 def get_random_name():
     file = open('usernames.txt', 'r')
     name_lines = file.read().splitlines()
-    num = random.randint(0, 132)
+    num = random.randint(0, 620)
     rand_name = name_lines[num]
     return '/u/' + rand_name
 
