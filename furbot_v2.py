@@ -262,7 +262,7 @@ def hidden_command_comment(comment_mode, response, comment_tag):
 def get_message(user_name):
     bonus = bonus_message(user_name)
     body = ('I am sorry, ' + str(user_name) + ', but I have outsourced my searching'
-            'please ask my helper ' + get_random_name() + ' to help you.'
+            'please ask my helper ' + get_random_name() + ' to help you.\n\n'
             '---\n\n'
             )
     footer = ('**^^^OwO Count: ' + get_owo_count() + '** \n\n I am a bot, this is done automatically in furry_irl. '
@@ -372,7 +372,7 @@ def add_owo_list(owo_num, username):
 
 def get_random_name():
     file = open('usernames.txt', 'r')
-    name_lines = file.readline()
+    name_lines = file.read().splitlines()
     num = random.randint(0, 132)
     rand_name = name_lines[num]
     return '/u/' + rand_name
@@ -380,7 +380,7 @@ def get_random_name():
 
 def make_tags():
     file = open('random_tags.txt', 'r')
-    tag_lines = file.readline()
+    tag_lines = file.read().splitlines()
     num = random.randint(0, 5)
     num2 = random.randint(7, 16)
     part_one = tag_lines[num]
