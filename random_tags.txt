@@ -1,0 +1,17 @@
+male
+female
+male/female
+female/female
+male/male
+ambiguous\_gender
+
+fox
+cat
+dog
+wolf
+horse
+tiger
+zebra
+dragon
+mouse
+rabbit
