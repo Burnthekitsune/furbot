@@ -261,7 +261,7 @@ def hidden_command_comment(comment_mode, response, comment_tag):
 # This makes the reply that the bot gives, this is the real meat of the bot.
 def get_message(user_name):
     bonus = bonus_message(user_name)
-    body = ('I am sorry, ' + str(user_name) + ', but I have outsourced my searching'
+    body = ('I am sorry, ' + str(user_name) + ', but I have outsourced my searching '
             'please ask my helper ' + get_random_name() + ' to help you.\n\n'
             '---\n\n'
             )
