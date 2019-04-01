@@ -631,6 +631,7 @@ try:
         elif 'furbot ban' in text.lower() and check_id(comment_id):
             if check_approved(author):
                 command = 'furbot ban'
+                full = str(comment.body)
                 cut_spot = full.lower().find(command) + 14
                 cut = full[cut_spot:]
                 cut_spot = cut.find('\n')
