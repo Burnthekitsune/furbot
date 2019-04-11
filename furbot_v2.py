@@ -451,8 +451,8 @@ try:
         elif 'furbot search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
-                full = str(comment.body)
                 add_id(comment_id)
+                full = text
                 command = 'furbot search'
                 lines = full.split('\n')
                 i = 0
@@ -497,8 +497,8 @@ try:
         elif 'furbot sfw search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
-                full = str(comment.body)
                 add_id(comment_id)
+                full = text
                 command = 'furbot sfw search'
                 lines = full.split('\n')
                 i = 0
@@ -544,8 +544,8 @@ try:
         elif 'furbot mild search ' in text.lower():
             if check_id(comment_id) and check_user(author):
                 check_owo(comment)
-                full = str(comment.body)
                 add_id(comment_id)
+                full = text
                 command = 'furbot mild search'
                 lines = full.split('\n')
                 i = 0
@@ -631,7 +631,7 @@ try:
         elif 'furbot ban' in text.lower() and check_id(comment_id):
             if check_approved(author):
                 command = 'furbot ban'
-                full = str(comment.body)
+                full = text
                 cut_spot = full.lower().find(command) + 14
                 cut = full[cut_spot:]
                 cut_spot = cut.find('\n')
