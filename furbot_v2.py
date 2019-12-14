@@ -44,7 +44,7 @@ bot = praw.Reddit(user_agent='Fur Bot v2',
 # A nice notice that the bot is running
 print(str(bot.user.me()) + ' is now running...')
 # Some default stuff
-subreddit = bot.subreddit('furry_irl+furrystarterpacks')
+subreddit = bot.subreddit('furry_irl+furrystarterpacks+furrypasta')
 comments = subreddit.stream.comments()
 comment_count = 0
 has_commented = False
