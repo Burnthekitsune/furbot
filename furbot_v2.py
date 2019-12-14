@@ -4,6 +4,7 @@ import time
 import praw
 import requests
 import tag_helper
+import comment_remover
 import re
 
 # gotta have a user agent for the request
@@ -241,7 +242,7 @@ def hidden_command(comment_body):
             else:
                 response = message_split[2]
         j += 1
-    if found_hidden_command:
+    if found_hidden_command and not False:  # removing hidden commands for a while
         full_info = hidden_command_comment(comment_mode, response, comment_tag)
         return full_info
     else:
@@ -318,6 +319,7 @@ def get_message(user_name, mode, search_tags):
               ', bug reports, feature requests, and news.'
               ' I am made by Pixel871, contact him if something happens to me.')
     full_message = bonus + body + " ^^^".join(footer.split())
+    remove_comments() # deletes anything it needs before posting comments
     return full_message
 
 
@@ -417,6 +419,10 @@ def add_owo_list(owo_num, username):
     add.close()
 
 
+def remove_comments():
+    comment_remover.removal()
+
+
 # The bot itself.
 # Due to how I have changed it, it doesn't need the try, but as soon as I remove it, it crashes.
 # So it stays, as it doesn't alter anything.
@@ -424,6 +430,7 @@ try:
     banned_tag_list = get_blacklist()
     link = basic_link + apply_blacklist(banned_tag_list)
     sfw_link = basic_sfw_link + apply_blacklist(banned_tag_list)
+    remove_comments()  # remove anything it needs to on startup
     for comment in comments:
         text = comment.body
         author = str(comment.author)
