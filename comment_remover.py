@@ -30,7 +30,7 @@ def removal():
                       username=bot_name,
                       password=get_password())
 
-    for submission in bot.redditor('furbot_').comments.controversial():
+    for submission in bot.redditor('furbot_').comments.controversial('week'):
         if submission.score < 0:
             print('Score: ' + str(submission.score))
             submission.delete()
