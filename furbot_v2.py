@@ -44,7 +44,7 @@ bot = praw.Reddit(user_agent='Fur Bot v2',
 # A nice notice that the bot is running
 print(str(bot.user.me()) + ' is now running...')
 # Some default stuff
-subreddit = bot.subreddit('furry_irl+furrystarterpacks')
+subreddit = bot.subreddit('furry_irl+furrystarterpacks+furrypasta')
 comments = subreddit.stream.comments()
 comment_count = 0
 has_commented = False
@@ -83,11 +83,11 @@ def check_id(given_id):
 def get_link(check_url, mode):
     r = requests.get(check_url, headers=header)
     contents = str(r.content)
-    sample = 'http://e621.net/post/show/'
-    tag_sample = '<entry>'
+    sample = 'https://e621.net/posts/'
+    tag_sample = '<summary>'
     source_sample = 'https://static'
     number = contents.find(sample)
-    tag_number = contents.find(tag_sample) + 22
+    tag_number = contents.find(tag_sample) + 9
     source_number = contents.find(source_sample)
     if number < 0:
         if mode == 'search':
