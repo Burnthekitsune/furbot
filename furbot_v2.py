@@ -84,11 +84,11 @@ def check_id(given_id):
 def get_link(check_url, mode):
     r = requests.get(check_url, headers=header)
     contents = str(r.content)
-    sample = 'http://e621.net/post/show/'
-    tag_sample = '<entry>'
+    sample = 'https://e621.net/posts/'
+    tag_sample = '<summary>'
     source_sample = 'https://static'
     number = contents.find(sample)
-    tag_number = contents.find(tag_sample) + 22
+    tag_number = contents.find(tag_sample) + 9
     source_number = contents.find(source_sample)
     if number < 0:
         if mode == 'search':
@@ -262,6 +262,7 @@ def hidden_command_comment(comment_mode, response, comment_tag):
 def get_message(user_name, mode, search_tags):
     body = 'Something has gone horribly wrong with the code!\n\n---\n\n'
     bonus = bonus_message(user_name)
+    warning = '[Warning, this may be NSFW!]'
     if bonus == '':
         if mode == 'e621':
             bonus = 'OwO, what\'s this?\n\n'
@@ -270,7 +271,7 @@ def get_message(user_name, mode, search_tags):
     if mode == 'e621':
         body = ('*pounces on ' + str(user_name) + '*'
                 '\n\n&nbsp;\n\n I heard you say e621, so have some free porn, '
-                'compliments of e621. (obviously nsfw) \n\n' + get_link(link, mode) + '\n\n'
+                'compliments of e621. (obviously nsfw) \n\n' + warning + get_link(link, mode) + '\n\n'
                 '---\n\n'
                 )
     if mode == 'e926':
@@ -282,7 +283,7 @@ def get_message(user_name, mode, search_tags):
     if mode == 'search' or mode == 'sfw search' or mode == 'mild search':
         tag_list = ' '.join(search_tags)
         body = ('Hi, ' + str(user_name) + '. Here is the results for your search for these search tags:'
-                ' \n\n' + tag_list + '\n\n' + get_link(search(search_tags, banned_tag_list, mode), mode) + '\n\n'
+                ' \n\n' + tag_list + '\n\n' + warning + get_link(search(search_tags, banned_tag_list, mode), mode) + '\n\n'
                 '---\n\n')
     if mode == 'denied':
         body = ('Oops! Mod Daddy will beat me if I search something like that! Sorry!' + '\n\n'
@@ -299,7 +300,7 @@ def get_message(user_name, mode, search_tags):
     if mode == 'not approved':
         body = 'I\'m sorry ' + str(author) + ', I\'m afraid I can\'t do that. \n\n---\n\n'
     if mode == 'hidden_search':
-        body = ('\n\n' + get_link(basic_link, mode) + '\n\n'
+        body = ('\n\n' + warning + get_link(basic_link, mode) + '\n\n'
                 '---\n\n')
     if mode == 'hidden_response':
         body = '\n\n---\n\n'
@@ -307,7 +308,7 @@ def get_message(user_name, mode, search_tags):
         body = 'Congratulations, ' + str(author) + '! That was the **' + get_owo_count() + 'th** owo since I ' \
                 'started to track them.\n\n---\n\n'
     if mode == 'furbot':
-        body = '\>///< Okay, I guess if you want to see me. \n\n' + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
+        body = '\>///< Okay, I guess if you want to see me. \n\n' + warning + get_link(basic_furbot_link, mode) + '\n\n---\n\n'
     if mode == 'good bot':
         body = 'Thank you, ' + author + '! I am glad I could be helpful. \\^^\n\n---\n\n'
     if mode == 'bad bot':
@@ -319,7 +320,7 @@ def get_message(user_name, mode, search_tags):
               ', bug reports, feature requests, and news.'
               ' I am made by Pixel871, contact him if something happens to me.')
     full_message = bonus + body + " ^^^".join(footer.split())
-    remove_comments() # deletes anything it needs before posting comments
+    remove_comments()  # deletes anything it needs before posting comments
     return full_message
 
 
