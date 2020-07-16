@@ -1,3 +1,5 @@
+# no longer maintained, I have lost interest in doing so
+
 # furbot
 
 It just posts porn and searches for pictures on the furry_irl subreddit.
